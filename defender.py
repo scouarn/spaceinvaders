@@ -5,15 +5,15 @@ from bullet import Bullet
 
 class Defender(GameObject) :
 	
-	def_image = None
+	image = None
 
 	def __init__(self, canvas) :
 
 		# load resources
-		if Defender.def_image is None :
-			Defender.def_image = tk.PhotoImage(file="assets/def1.png")
+		if Defender.image is None :
+			Defender.image = tk.PhotoImage(file="assets/def1.png")
 
-		super().__init__(canvas, c="red", image=Defender.def_image)
+		super().__init__(canvas, c="red", image=Defender.image)
 
 
 		self.bullets = []

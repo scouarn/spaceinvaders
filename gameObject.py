@@ -1,5 +1,3 @@
-from random import randint
-
 import tkinter as tk
 
 
@@ -13,8 +11,8 @@ class GameObject :
 		self.c = c
 		self.image = image
 
-		self.vx = randint(-100, 100)
-		self.vy = randint(-100, 100)
+		self.vx = 0
+		self.vy = 0
 
 		self.sprite = canvas.create_image(
 			self.x, self.y,
@@ -22,39 +20,46 @@ class GameObject :
 			anchor = tk.NW
 		)
 
-		print(canvas.coords(self.sprite))
-
 
 	def update(self, canvas, dt) :
 		
-
-		# collisions
-		if self.x < 0 or self.x >= canvas.winfo_reqwidth() :
-			self.vx = -self.vx
-
-		if self.y < 0 or self.y >= canvas.winfo_reqheight() :
-			self.vy = -self.vy
-
 		# movement
 		self.x += self.vx * dt
 		self.y += self.vy * dt
 
-
 		# update sprite position
-		sx, sy = canvas.coords(self.sprite)
-		dx = self.x - sx
-		dy = self.y - sy
-		canvas.move(self.sprite, dx, dy)
-
+		canvas.moveto(self.sprite, self.x, self.y)
+		
+		return False # True for game over
 
 
 	def set_pos(self, x, y) :
 		self.x = x
 		self.y = y
 
-	def get_pos(self, x, y) :
+	def get_pos(self) :
 		return self.x, self.y
 
 	def set_vel(self, vx, vy) :
 		self.vx = vx
 		self.vy = vy
+
+	def get_vel(self) :
+		return self.vx, self.vy
+
+	def screen_collision_N(self, canvas) :
+		return self.y < 0
+
+	def screen_collision_W(self, canvas) :	
+		return self.x < 0
+
+	def screen_collision_S(self, canvas) :
+		y2 = self.y + self.image.height()
+		return y2 >= canvas.height()
+
+	def screen_collision_E(self, canvas) :	
+		x2 = self.x + self.image.width()
+		return x2 >= canvas.width()
+
+	def screen_collision(self, canvas) :
+		return self.screen_collision_N(canvas) or self.screen_collision_S(canvas) or self.screen_collision_E(canvas) or self.screen_collision_W(canvas)
