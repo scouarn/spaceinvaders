@@ -13,4 +13,3 @@ class Game :
 		self.player.update(canvas, dt)
 		self.fleet.update(canvas, dt)
 
-

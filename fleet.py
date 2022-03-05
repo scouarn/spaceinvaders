@@ -1,11 +1,16 @@
+
+
 from gameObject import GameObject
 from alien import Alien
 
 class Fleet(GameObject) : 
 
-	def __init__(self, canvas, size=10) :
-		super().__init__(canvas)
 
+	def __init__(self, canvas, size=10) :
+		super().__init__(canvas, c="purple")
+
+		
+		
 		self.size = size
 		self.aliens = [Alien(canvas) for i in range(size)]
 
