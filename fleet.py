@@ -1,4 +1,4 @@
-
+import tkinter as tk
 
 from gameObject import GameObject
 from alien import Alien
@@ -16,6 +16,13 @@ class Fleet(GameObject) :
 		self.vy = 16
 		self.finish_line = 500
 
+		self.images = [
+			tk.PhotoImage(file="assets/alien1.png"),
+			tk.PhotoImage(file="assets/alien2.png"),
+			tk.PhotoImage(file="assets/alien3.png"),
+			tk.PhotoImage(file="assets/alien4.png"),
+		]
+
 		self.aliens = []
 
 		for i in range(self.cols) :
@@ -23,7 +30,8 @@ class Fleet(GameObject) :
 				x = i * self.spacing
 				y = j * self.spacing
 
-				a = Alien(canvas)
+				image = self.images[j % len(self.images)]
+				a = Alien(canvas, image=image)
 				a.set_pos(x, y)
 				a.set_vel(self.vx, 0)
 				
@@ -31,7 +39,7 @@ class Fleet(GameObject) :
 
 		canvas.create_line(
 			0, self.finish_line,
-			800, self.finish_line, 
+			canvas.width(), self.finish_line, 
 			fill="gray", 
 			width=5
 		)
