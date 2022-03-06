@@ -1,7 +1,10 @@
 import tkinter as tk
+import random
+import time
 
 from gameObject import GameObject
 from alien import Alien
+from bullet import Bullet
 
 class Fleet(GameObject) : 
 
@@ -10,11 +13,11 @@ class Fleet(GameObject) :
 		super().__init__(canvas, c="purple")
 
 		self.rows = 4
-		self.cols = 8
-		self.spacing = 64
+		self.cols = 6
+		self.spacing = 70
 		self.vx = 100
 		self.vy = 16
-		self.finish_line = 500
+		self.acc = 1.1
 
 		self.images = [
 			tk.PhotoImage(file="assets/alien1.png"),
@@ -23,12 +26,19 @@ class Fleet(GameObject) :
 			tk.PhotoImage(file="assets/alien4.png"),
 		]
 
+		self.bullets = []
+		self.lastshot = time.time()
+		self.interval = 0.5
+
 		self.aliens = []
 
+		xoff = 0
+		yoff = 64
+	
 		for i in range(self.cols) :
 			for j in range(self.rows) :
-				x = i * self.spacing
-				y = j * self.spacing
+				x = xoff + i * self.spacing
+				y = yoff + j * self.spacing
 
 				image = self.images[j % len(self.images)]
 				a = Alien(canvas, image=image)
@@ -37,43 +47,37 @@ class Fleet(GameObject) :
 				
 				self.aliens.append(a)
 
-		canvas.create_line(
-			0, self.finish_line,
-			canvas.width(), self.finish_line, 
-			fill="gray", 
-			width=5
-		)
-
-
-
 
 	def update(self, canvas, dt) :
 
-		collided = False
-		game_over = False
+		now = time.time()
+		if now - self.lastshot >= self.interval :
+			self.lastshot = now
 
+			a = random.choice(self.aliens)
+			b = Bullet(canvas, a.x+32, a.y, 350)
+			self.bullets.append(b)
+
+
+
+		for b in self.bullets :
+			b.update(canvas, dt)
+
+
+		collided = False
+		
 		for a in self.aliens :
 			a.update(canvas, dt)
 
 			if a.screen_collision(canvas) :
 				collided = True
 
-			if a.get_pos()[1] >= self.finish_line :
-				game_over = True	
 
-
-
-		if game_over :
-			return True
-
-
+		# speed up and reverse direction
 		if collided :
+			self.vx *= -self.acc
+
 			for a in self.aliens :
-				vx, vy = a.get_vel()
-				a.set_vel(-vx, vy)
+				a.vx = self.vx
+				a.y += self.vy
 
-				x, y = a.get_pos()
-				a.set_pos(x, y + self.vy)
-
-
-		return False

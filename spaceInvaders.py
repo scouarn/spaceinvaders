@@ -9,7 +9,7 @@ class SpaceInvaders :
 	def __init__(self) :
 		
 		self.width = 800
-		self.height = 600
+		self.height = 800
 
 		self.win = tk.Tk()
 		self.win.title("Space Invaders")
@@ -38,7 +38,9 @@ class SpaceInvaders :
 		self.running = False
 		self.game = Game(self.canvas)
 
-
+		self.win.bind('<KeyPress>', self.game.key_down)
+		self.win.bind('<KeyRelease>', self.game.key_up)
+	
 
 	def stop(self) :
 		# join with the game loop
