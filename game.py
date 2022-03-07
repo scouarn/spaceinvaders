@@ -7,7 +7,7 @@ class Game :
 
 	def __init__(self, canvas) :
 		self.fleet = Fleet(canvas)
-		self.finish_line = canvas.height() - 100
+		self.finish_line = canvas.height() * 0.8
 
 		self.player = Defender(canvas)
 		self.player.set_pos(

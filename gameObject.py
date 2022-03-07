@@ -33,6 +33,7 @@ class GameObject :
 
 	def destroy(self, canvas) :
 		canvas.delete(self.sprite)
+		self.sprite = None
 
 	def update(self, canvas, dt) :
 		
