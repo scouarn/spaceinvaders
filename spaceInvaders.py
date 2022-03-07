@@ -9,7 +9,7 @@ class SpaceInvaders :
 	def __init__(self) :
 		
 		self.width = 800
-		self.height = 800
+		self.height = 600
 
 		self.win = tk.Tk()
 		self.win.title("Space Invaders")
@@ -36,11 +36,8 @@ class SpaceInvaders :
 
 		self.frameRate = 60
 		self.running = False
-		self.game = Game(self.canvas)
+		self.game = Game(self.win, self.canvas)
 
-		self.win.bind('<KeyPress>', self.game.key_down)
-		self.win.bind('<KeyRelease>', self.game.key_up)
-	
 
 	def stop(self) :
 		# join with the game loop
@@ -52,16 +49,19 @@ class SpaceInvaders :
 		self.lastTime = time.time()
 		self.running = True
 
-		game_over = False
-
 
 		while self.running :
 			now = time.time()
 			dt = now - self.lastTime
 			self.lastTime = now
 			
-			if not game_over :
-				game_over = self.game.update(self.canvas, dt)
+			self.game.update(self.canvas, dt)
+
+			# reset game
+			if self.game.done :
+				self.game.destroy(self.win, self.canvas)
+				self.game = Game(self.win, self.canvas)
+
 
 			self.win.update()
 

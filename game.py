@@ -5,7 +5,7 @@ from explosion import Explosion
 class Game :
 
 
-	def __init__(self, canvas) :
+	def __init__(self, win, canvas) :
 		self.fleet = Fleet(canvas)
 		self.finish_line = canvas.height() * 0.8
 
@@ -14,14 +14,25 @@ class Game :
 			canvas.width() / 2, 
 			(self.finish_line + canvas.height() - + Defender.image.height()) / 2)
 
+
 		self.explosions = []
 
 		self.leftKey  = False
 		self.rightKey = False
 		self.fireKey = False
 
+		self.game_over = False
+		self.game_over_text = None
+		self.replay_text = None
 
-		canvas.create_line(
+		self.done = False # flag the parent object that it can delete/reset the game object
+
+
+		win.bind("<KeyPress>", self.key_down)
+		win.bind("<KeyRelease>", self.key_up)
+	
+
+		self.finish_line_gfx = canvas.create_line(
 			0, self.finish_line,
 			canvas.width(), self.finish_line, 
 			fill="gray", 
@@ -29,8 +40,25 @@ class Game :
 		)
 
 
+	def destroy(self, win, canvas) :
+		self.fleet.destroy(canvas)
+		self.player.destroy(canvas)
+
+		canvas.delete(self.finish_line_gfx)
+		canvas.delete(self.game_over_text)
+		canvas.delete(self.replay_text)
+
+		for e in self.explosions :
+			e.destroy(canvas)
+
+		win.unbind("<KeyPress>")
+		win.unbind("<KeyRelease>")
+		
 
 	def update(self, canvas, dt) :
+
+		if self.game_over :
+			return
 
 		self.player.update(canvas, dt, self.leftKey, self.rightKey, self.fireKey)
 		self.fleet.update(canvas, dt)
@@ -56,12 +84,10 @@ class Game :
 
 					self.boom(canvas, a.x, a.y)
 
+					# this alien has been removed from the list 
+					# so skip to the next one
+					break 
 
-
-		# check if an alien has past the "finish line"
-		if any([a.y + a.height >= self.finish_line for a in self.fleet.aliens]) :
-			self.game_over(canvas)
-			return True
 
 		# check if an alien bullet hits the player
 		for b in self.fleet.bullets :
@@ -72,18 +98,22 @@ class Game :
 				self.fleet.bullets.remove(b)
 
 
+
+
+		# check if an alien has past the "finish line"
+		if any([a.y + a.height >= self.finish_line for a in self.fleet.aliens]) :
+			self.do_game_over(canvas)
+			return
+
 		# check if the player is dead
 		if not self.player.alive :
-			self.game_over(canvas)
-			return True
+			self.do_game_over(canvas)
+			return
 
 		# check if all the aliens are dead
 		if len(self.fleet.aliens) == 0 :
-			self.game_over(canvas, text="YOU WIN !")
-			return True
-
-
-		return False
+			self.do_game_over(canvas, text="YOU WIN !")
+			return
 
 
 	def boom(self, canvas, x, y) :
@@ -92,13 +122,24 @@ class Game :
 		canvas.lower(e.sprite)
 
 
-	def game_over(self, canvas, text="GAME OVER !") :
-		canvas.create_text(
+	def do_game_over(self, canvas, text="GAME OVER !") :
+		self.game_over = True
+
+		self.game_over_text = canvas.create_text(
 			canvas.width()/2,
 			canvas.height()/2, 
 			text=text, 
 			fill="white", 
 			font=('Arial 32 bold')
+		)
+
+		self.replay_text = canvas.create_text(
+			canvas.width()/2,
+			canvas.height() * 0.75, 
+
+			text="Press space to replay.", 
+			fill="white", 
+			font=('Arial 24 bold')
 		)
 
 
@@ -107,6 +148,11 @@ class Game :
 		
 		if e.keysym == "space" :
 			self.fireKey = True
+
+			# replay/exit
+			if self.game_over :
+				self.done = True
+
 
 		elif e.keysym == "Left" :
 			self.leftKey = True

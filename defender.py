@@ -33,9 +33,21 @@ class Defender(GameObject) :
 
 		self.bullets = []
 		self.interval = 1.0
-		self.timer = self.interval
+		self.timer = 0.0
 
 
+
+	def destroy(self, canvas) :
+		super().destroy(canvas)
+
+		for l in self.lives :
+			canvas.delete(l)
+
+		for b in self.bullets :
+			b.destroy(canvas)
+
+
+		
 
 	def update(self, canvas, dt, Lkey, Rkey, Fkey) :
 

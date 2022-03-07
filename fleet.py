@@ -19,16 +19,10 @@ class Fleet(GameObject) :
 		self.vy = 16
 		self.acc = 1.1
 
-		self.images = [
-			tk.PhotoImage(file="assets/alien1.png"),
-			tk.PhotoImage(file="assets/alien2.png"),
-			tk.PhotoImage(file="assets/alien3.png"),
-			tk.PhotoImage(file="assets/alien4.png"),
-		]
 
 		self.bullets = []
-		self.lastshot = time.time()
 		self.interval = 0.5
+		self.timer = 0.0
 
 		self.aliens = []
 
@@ -40,19 +34,28 @@ class Fleet(GameObject) :
 				x = xoff + i * self.spacing
 				y = yoff + j * self.spacing
 
-				image = self.images[j % len(self.images)]
-				a = Alien(canvas, image=image)
-				a.set_pos(x, y)
+				a = Alien(canvas, x=x, y=y, type=j)
 				a.set_vel(self.vx, 0)
 				
 				self.aliens.append(a)
 
 
+
+	def destroy(self, canvas) :
+		super().destroy(canvas)
+
+		for a in self.aliens :
+			a.destroy(canvas)
+
+		for b in self.bullets :
+			b.destroy(canvas)
+			
+
 	def update(self, canvas, dt) :
 
-		now = time.time()
-		if now - self.lastshot >= self.interval :
-			self.lastshot = now
+		self.timer -= dt
+		if self.timer <= 0 :
+			self.timer = self.interval
 
 			a = random.choice(self.aliens)
 			b = Bullet(canvas, a.x+32, a.y, 350)
