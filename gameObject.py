@@ -4,12 +4,11 @@ import tkinter as tk
 # generic game object
 class GameObject :
 
-	def __init__(self, canvas, x=0, y=0, r=10, c="red", image=None) :
+	def __init__(self, canvas, x=0, y=0, image=None) :
 		self.x = x
 		self.y = y
-		self.r = r
-		self.c = c
-		self.alive = True
+		self.vx = 0
+		self.vy = 0
 
 		if image is None :
 			self.width = self.height = 0
@@ -18,8 +17,7 @@ class GameObject :
 			self.width = image.width()
 			self.height = image.height()
 
-		self.vx = 0
-		self.vy = 0
+		self.alive = True
 
 		self.sprite = canvas.create_image(
 			self.x, self.y,
@@ -60,22 +58,16 @@ class GameObject :
 	def get_vel(self) :
 		return self.vx, self.vy
 
-	def screen_collision_N(self, canvas) :
-		return self.y < 0
-
-	def screen_collision_W(self, canvas) :	
-		return self.x < 0
-
-	def screen_collision_S(self, canvas) :
-		y2 = self.y + self.height
-		return y2 >= canvas.height()
-
-	def screen_collision_E(self, canvas) :	
-		x2 = self.x + self.width
-		return x2 >= canvas.width()
 
 	def screen_collision(self, canvas) :
-		return self.screen_collision_N(canvas) or self.screen_collision_S(canvas) or self.screen_collision_E(canvas) or self.screen_collision_W(canvas)
+
+		return any([
+			self.x < 0,
+			self.y < 0,
+			self.x + self.width >= canvas.width(),
+			self.y + self.height >= canvas.height()
+		])
+
 
 	def collision(o1, o2) :
 		H = o1.x + o1.width  >= o2.x and o1.x <= o2.x + o2.width

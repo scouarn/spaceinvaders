@@ -10,14 +10,15 @@ class Fleet(GameObject) :
 
 
 	def __init__(self, canvas) :
-		super().__init__(canvas, c="purple")
+		super().__init__(canvas)
 
-		self.rows = 4
-		self.cols = 6
-		self.spacing = 70
 		self.vx = 100
 		self.vy = 16
 		self.acc = 1.1
+		
+		self.rows = 4
+		self.cols = 6
+		self.spacing = 70
 
 
 		self.bullets = []

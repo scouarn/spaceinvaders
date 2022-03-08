@@ -6,14 +6,14 @@ class Explosion(GameObject) :
 	
 	image = None
 
-	def __init__(self, canvas, x, y) :
+	def __init__(self, canvas, x, y, timer=1.0) :
 
 		if Explosion.image is None :
 			Explosion.image = tk.PhotoImage(file="assets/explo1.png")
 
 		super().__init__(canvas, x=x, y=y, image=Explosion.image)
 
-		self.timer = 1.0
+		self.timer = timer
 
 
 
@@ -23,6 +23,7 @@ class Explosion(GameObject) :
 
 		if self.timer <= 0 :
 			self.alive = False
+			canvas.delete(self.sprite)
 
 
 		self.update_sprite(canvas)

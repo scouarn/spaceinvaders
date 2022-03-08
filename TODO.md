@@ -7,6 +7,9 @@
 
 # IMPROVEMENTS :
 
+* "Frame contenant le canvas"
+
+* hit method for fleet / alien ?
 * immunity frames
 * aliens not shooting through each other
 * aliens shooting when over the player
@@ -19,10 +22,10 @@
 
 # FEATURES :
 
+* points
+* menu
+* bunkers
+* gun reload bar
 * sounds
 * animations
-* gun reload bar
-* bunkers
-* menu
-* points
 

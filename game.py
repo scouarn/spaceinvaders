@@ -21,11 +21,11 @@ class Game :
 		self.rightKey = False
 		self.fireKey = False
 
+		self.done = False # flag the parent object that it can delete/reset the game object
 		self.game_over = False
 		self.game_over_text = None
 		self.replay_text = None
 
-		self.done = False # flag the parent object that it can delete/reset the game object
 
 
 		win.bind("<KeyPress>", self.key_down)
@@ -57,6 +57,7 @@ class Game :
 
 	def update(self, canvas, dt) :
 
+		# nothing to do on the game over screen
 		if self.game_over :
 			return
 
@@ -67,7 +68,6 @@ class Game :
 			e.update(canvas, dt)
 
 			if not e.alive :
-				e.destroy(canvas)
 				self.explosions.remove(e)
 
 
@@ -119,6 +119,8 @@ class Game :
 	def boom(self, canvas, x, y) :
 		e = Explosion(canvas, x, y)
 		self.explosions.append(e)
+
+		# show explosions behind other sprites
 		canvas.lower(e.sprite)
 
 

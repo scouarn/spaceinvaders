@@ -29,10 +29,9 @@ class SpaceInvaders :
 		self.canvas.width  = lambda : self.width
 		self.canvas.height = lambda : self.height
 
-
+		# escape to quit
 		self.win.bind('<Escape>',  lambda ev : self.stop())
 		self.win.bind('<Destroy>', lambda ev : self.stop())
-
 
 		self.frameRate = 60
 		self.running = False
@@ -51,10 +50,13 @@ class SpaceInvaders :
 
 
 		while self.running :
+
+			# compute elapsed time
 			now = time.time()
 			dt = now - self.lastTime
 			self.lastTime = now
-			
+
+
 			self.game.update(self.canvas, dt)
 
 			# reset game
@@ -65,11 +67,11 @@ class SpaceInvaders :
 
 			self.win.update()
 
-			now = time.time()
-			dt = now - self.lastTime
+			# limit fps
+			dt = time.time() - self.lastTime
 			wait = 1/self.frameRate - dt
 
 			if wait > 0 :
-				time.sleep(1/self.frameRate)
+				time.sleep(wait)
 
 		self.win.destroy()
