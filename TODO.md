@@ -2,7 +2,6 @@
 
 # BUGS :
 
-* fleet "falling" ?
 
 
 # IMPROVEMENTS :
@@ -18,12 +17,14 @@
 * check for common ancestor principle
 * check the architecture
 * check encapsulation principle
+* getter method... :/
 
 
 # FEATURES :
 
+* point bonus on win function of remaining lives and height of the aliens
 * menu : player name
 * bunkers
-* sounds
 * animations
+* sounds
 
