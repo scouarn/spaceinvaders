@@ -30,6 +30,11 @@ class Defender(GameObject) :
 
 			self.lives.append(s)
 
+		self.reload_bar = canvas.create_rectangle(
+			0, 0, 0, 0, # set later
+			fill='white'
+		)
+
 
 		self.bullets = []
 		self.interval = 1.0
@@ -46,6 +51,7 @@ class Defender(GameObject) :
 		for b in self.bullets :
 			b.destroy(canvas)
 
+		canvas.delete(self.reload_bar)
 
 		
 
@@ -57,7 +63,7 @@ class Defender(GameObject) :
 		if Rkey and self.x + self.width < canvas.width() :
 			self.x += self.vx * dt
 
-
+		# handle shooting
 		self.timer -= dt
 		if Fkey and self.timer <= 0 :
 			self.timer = self.interval
@@ -65,6 +71,18 @@ class Defender(GameObject) :
 			self.bullets.append(b)
 
 
+		# update reload bar
+		x = 1.0 - self.timer / self.interval
+		canvas.coords(
+			self.reload_bar, 
+			0, canvas.height()-10, 
+			x * canvas.width(), canvas.height()
+		)
+
+		color = 'orange' if self.timer > 0 else 'green'
+		canvas.itemconfig(self.reload_bar, fill=color)
+
+		# update bullets
 		for b in self.bullets :
 			b.update(canvas, dt)
 

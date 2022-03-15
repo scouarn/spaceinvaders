@@ -63,17 +63,20 @@ Logique principale du jeu.
 * player : instance de Defender
 * fleet : instance de Fleet
 * explosions : une collection d'instances d'Explosion
-* game_over_text / replay_text : tag d'objet canvas pour le texte
+* game_over_text / replay_text / score_text : tag d'objet canvas pour le texte
 * leftKey, rightKey, fireKey : booléens indiquant si les touches de déplacement et de tire sont pressées
 * game_over : booléen indiquant que le jeu est sur l'écran de game over
 * done : booléen indiquant que le jeu est terminé et que l'instance est prête à être détruite pour une autre partie ou bien pour arrêter (l'écran game over s'est affiché et le joueur a appuyé sur espace pour rejouer)
-
+* player_name : nom du joueur dans la liste des scores
+* current_score : nombre de points gagnés lors de la partie
+* scores : dictionnaire liant un nom de joueur à son meilleur score
 
 ## Responsabilités :
 * contrôles propres au jeu : mise à jour des variables leftKey, rightKey et fireKey  
 * mise à jour de player et fleet
 * mise à jour de explosions et destruction des explosion "mortes"/dissipées
-* collision entre les projectiles du joueur et la flotte : explosion et destruction de l'alien
+* comptabilisation des points et mise à jour du fichier avec les meilleurs scores
+* collision entre les projectiles du joueur et la flotte : explosion et destruction de l'alien et gain de points
 * collision entre les projectiles de la flotte et le joueur : explosion et perte d'une vie du joueur
 * détection de fin de partie/game over/win : le joueur n'a plus de vies, les aliens ont atteint le bas de l'écran (ligne grise "finish_line") ou tous les aliens sont détruits
 * affichage de l'écran game over
@@ -116,14 +119,14 @@ Rq : certains aspects de Defender sont dupliqués de Fleet
 * bullets : list des balles tirés par le joueur
 * interval : temps qu'il faut pour recharger le canon
 * timer : temps restant avant que le canon soit rechargé, si < 0 alors le canon peut tirer à nouveau.
-
+* reload_bar : rectangle sur le canvas qui indique le temps de rechargement du canon
 
 ## Responsabilités :
 * décrémenter timer
+* mettre à jour la taille de la barre de rechargement
 * projectiles tirés par le joueur, leur création et destruction lorsqu'ils sortent de l'écran
 * les sprites qui indiquent les vies restantes 
 * se déplacer/tirer en fonction des touches pressées
-
 
 
 
@@ -160,6 +163,8 @@ La classe Alien est pratiquement vide, tout étant déjà géré par la classe p
 
 ## Structure :
 * type : indique quel image utiliser pour le sprite (indice dans la liste), pourra éventuellement indiquer le nombre de points que vaut l'alien.
+
+* point_value : nombre de points que vaut l'alien
 
 ## Responsabilités :
 Aucune (sauf chargement du fichier image)

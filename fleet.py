@@ -35,7 +35,7 @@ class Fleet(GameObject) :
 				x = xoff + i * self.spacing
 				y = yoff + j * self.spacing
 
-				a = Alien(canvas, x=x, y=y, type=j)
+				a = Alien(canvas, x=x, y=y, type=self.rows-j-1)
 				a.set_vel(self.vx, 0)
 				
 				self.aliens.append(a)

@@ -2,6 +2,10 @@ from defender import Defender
 from fleet import Fleet
 from explosion import Explosion
 
+import tkinter as tk
+import re
+
+
 class Game :
 
 
@@ -39,6 +43,23 @@ class Game :
 			width=5
 		)
 
+		self.score_text = canvas.create_text(
+			canvas.width() - 10,
+			10, 
+			anchor=tk.NE,
+			text='', 
+			fill="white", 
+			font=('Mono 20 bold italic')
+		)
+
+		self.player_name = "PLAYER1"
+		self.current_score = 0
+		self.scores = {}
+		self.loadScore()
+
+		# init score graphics
+		self.addScore(canvas, 0)
+
 
 	def destroy(self, win, canvas) :
 		self.fleet.destroy(canvas)
@@ -47,6 +68,7 @@ class Game :
 		canvas.delete(self.finish_line_gfx)
 		canvas.delete(self.game_over_text)
 		canvas.delete(self.replay_text)
+		canvas.delete(self.score_text)
 
 		for e in self.explosions :
 			e.destroy(canvas)
@@ -61,9 +83,11 @@ class Game :
 		if self.game_over :
 			return
 
+		# update defender and fleet
 		self.player.update(canvas, dt, self.leftKey, self.rightKey, self.fireKey)
 		self.fleet.update(canvas, dt)
 
+		# update explosions
 		for e in self.explosions :
 			e.update(canvas, dt)
 
@@ -79,13 +103,14 @@ class Game :
 					a.destroy(canvas)
 					b.destroy(canvas)
 
+					self.boom(canvas, a.x, a.y)
+					self.addScore(canvas, a.point_value)
+					
 					self.fleet.aliens.remove(a)
 					self.player.bullets.remove(b)
 
-					self.boom(canvas, a.x, a.y)
-
-					# this alien has been removed from the list 
-					# so skip to the next one
+					# the alien has been removed,
+					# skip to the next one
 					break 
 
 
@@ -98,12 +123,15 @@ class Game :
 				self.fleet.bullets.remove(b)
 
 
+		# check if an alien has reach the finish line
+		# if any([a.y + a.height >= self.finish_line for a in self.fleet.aliens]) :
+			# self.do_game_over(canvas)
+			# return
+		for a in self.fleet.aliens :
+			if a.y + a.height >= self.finish_line :
+				self.do_game_over(canvas)
+				return
 
-
-		# check if an alien has past the "finish line"
-		if any([a.y + a.height >= self.finish_line for a in self.fleet.aliens]) :
-			self.do_game_over(canvas)
-			return
 
 		# check if the player is dead
 		if not self.player.alive :
@@ -112,6 +140,7 @@ class Game :
 
 		# check if all the aliens are dead
 		if len(self.fleet.aliens) == 0 :
+			self.addScore(canvas, 10000)
 			self.do_game_over(canvas, text="YOU WIN !")
 			return
 
@@ -144,6 +173,58 @@ class Game :
 			font=('Arial 24 bold')
 		)
 
+		self.saveScore()
+
+
+	def addScore(self, canvas, n) :
+		self.current_score += n
+
+		# uninitialized scores
+		assert(self.player_name in self.scores)
+
+
+		best_score = self.scores[self.player_name]
+
+		if best_score < self.current_score :
+			best_score = self.current_score
+			self.scores[self.player_name] = self.current_score
+
+		canvas.itemconfig(
+			self.score_text, 
+			text=f"score: {self.current_score:06d}\nbest : {best_score:06d}"
+		)
+
+
+	def loadScore(self, fname="scores") :
+
+
+		try :
+			fp = open(fname, 'r')
+
+			for l in fp.readlines() :
+				if m := re.match(r"([a-zA-Z0-1]+):(\d+)", l) :
+					score = int(m.group(2))
+					player = m.group(1)
+
+					# keep the biggest score if it already exists
+					if player not in self.scores or self.scores[player] < score :
+						self.scores[player] = score 
+
+			fp.close()
+
+
+		# ignore the procedure if the file doesn't exist
+		except FileNotFoundError :
+			pass
+
+		if self.player_name not in self.scores :
+			self.scores[self.player_name] = self.current_score
+
+	def saveScore(self, fname="scores") :
+
+		with open(fname, 'w') as fp :
+			for k, v in self.scores.items() :
+				fp.write(f"{k}:{v}\n")
 
 
 	def key_down(self, e) :

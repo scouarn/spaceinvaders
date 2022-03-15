@@ -22,10 +22,8 @@
 
 # FEATURES :
 
-* points
-* menu
+* menu : player name
 * bunkers
-* gun reload bar
 * sounds
 * animations
 

@@ -11,11 +11,13 @@ class Alien(GameObject) :
 
 		if Alien.images is None :
 			Alien.images = [
-				tk.PhotoImage(file="assets/alien1.png"),
-				tk.PhotoImage(file="assets/alien2.png"),
-				tk.PhotoImage(file="assets/alien3.png"),
 				tk.PhotoImage(file="assets/alien4.png"),
+				tk.PhotoImage(file="assets/alien3.png"),
+				tk.PhotoImage(file="assets/alien2.png"),
+				tk.PhotoImage(file="assets/alien1.png"),
 			]
 
+
+		self.point_value = 100 * (self.type+1)
 
 		super().__init__(canvas, x=x, y=y, image=Alien.images[self.type % len(Alien.images)])
