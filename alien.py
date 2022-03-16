@@ -20,7 +20,8 @@ class Alien(GameObject) :
 
 		self.point_value = 100 * (self.type+1)
 
-		super().__init__(canvas, 
+		super().__init__(
+			canvas, 
 			x=x, y=y, vx=vx,
 			image=Alien.images[self.type % len(Alien.images)
 		])

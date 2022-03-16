@@ -57,11 +57,11 @@ class SpaceInvaders :
 			self.lastTime = now
 
 
-			self.game.update(self.canvas, dt)
+			self.game.update(dt)
 
 			# handle post game over
 			if self.game.done :
-				self.game.destroy(self.win, self.canvas)
+				self.game.destroy(self.win)
 				self.game = Game(self.win, self.canvas)
 
 

@@ -20,7 +20,7 @@ class Defender(GameObject) :
 		self.vx = 200
 
 		self.lives = [
-			canvas.create_image(
+			self.canvas.create_image(
 				i * self.width, 0,
 				image=Defender.image, 
 				anchor=tk.NW
@@ -29,7 +29,7 @@ class Defender(GameObject) :
 			for i in range(hp)
 		]
 
-		self.reload_bar = canvas.create_rectangle(
+		self.reload_bar = self.canvas.create_rectangle(
 			0, 0, 0, 0, # set later
 			fill='white'
 		)
@@ -41,62 +41,64 @@ class Defender(GameObject) :
 
 
 
-	def destroy(self, canvas) :
-		super().destroy(canvas)
+	def destroy(self) :
+		super().destroy()
 
 		for l in self.lives :
-			canvas.delete(l)
+			self.canvas.delete(l)
 
 		for b in self.bullets : 
-			b.destroy(canvas)
+			b.destroy()
 
-		canvas.delete(self.reload_bar)
+		self.canvas.delete(self.reload_bar)
 
 		
 
-	def update(self, canvas, dt, Lkey, Rkey, Fkey) :
+	def update(self, dt, Lkey, Rkey, Fkey) :
 
 		if Lkey and self.x > 0 :
 			self.x -= self.vx * dt
 
-		if Rkey and self.x + self.width < canvas.width() :
+		if Rkey and self.x + self.width < self.canvas.width() :
 			self.x += self.vx * dt
 
 		# handle shooting
 		self.timer -= dt
 		if Fkey and self.timer <= 0 :
 			self.timer = self.interval
-			b = Bullet(canvas, self.x+32, self.y, -350)
+			b = Bullet(self.canvas, self.x+32, self.y, -350)
 			self.bullets.append(b)
 
 
 		# update reload bar
 		x = 1.0 - self.timer / self.interval
-		canvas.coords(
+		self.canvas.coords(
 			self.reload_bar, 
-			0, canvas.height()-10, 
-			x * canvas.width(), canvas.height()
+			0, 
+			self.canvas.height()-10, 
+			x * self.canvas.width(), 
+			self.canvas.height()
 		)
 
 		color = 'orange' if self.timer > 0 else 'green'
-		canvas.itemconfig(self.reload_bar, fill=color)
+		self.canvas.itemconfig(self.reload_bar, fill=color)
 
 		# update bullets
 		for b in self.bullets :
-			b.update(canvas, dt)
+			b.update(dt)
 
-			if b.screen_collision(canvas) :
-				b.destroy(canvas)
+			if b.screen_collision() :
+				b.destroy()
 				self.bullets.remove(b)
 
-		self.update_sprite(canvas)
+		self.update_sprite()
 
 
-	def hit(self, canvas) :
+	def hit(self) :
 
 		if self.lives :
 			L = self.lives.pop()
-			canvas.delete(L)
+			self.canvas.delete(L)
 
 		else :
 			self.alive = False

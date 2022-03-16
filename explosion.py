@@ -17,14 +17,14 @@ class Explosion(GameObject) :
 
 
 
-	def update(self, canvas, dt) :
+	def update(self, dt) :
 
 		self.timer -= dt
 
 		if self.timer <= 0 :
 			self.alive = False
-			canvas.delete(self.sprite)
+			self.destroy()
 
 
-		self.update_sprite(canvas)
+		self.update_sprite()
 

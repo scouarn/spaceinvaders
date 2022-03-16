@@ -10,13 +10,14 @@ class Game :
 
 
 	def __init__(self, win, canvas) :
-		self.fleet = Fleet(canvas)
-		self.finish_line = canvas.height() * 0.8
+		self.canvas = canvas
+		self.fleet = Fleet(self.canvas)
+		self.finish_line = self.canvas.height() * 0.8
 
-		self.player = Defender(canvas)
+		self.player = Defender(self.canvas)
 		self.player.set_pos(
-			canvas.width() / 2, 
-			(self.finish_line + canvas.height() - + Defender.image.height()) / 2)
+			self.canvas.width() / 2, 
+			(self.finish_line + self.canvas.height() - Defender.image.height()) / 2)
 
 
 		self.explosions = []
@@ -36,15 +37,17 @@ class Game :
 		win.bind("<KeyRelease>", self.key_up)
 	
 
-		self.finish_line_gfx = canvas.create_line(
-			0, self.finish_line,
-			canvas.width(), self.finish_line, 
+		self.finish_line_gfx = self.canvas.create_line(
+			0, 
+			self.finish_line,
+			self.canvas.width(), 
+			self.finish_line, 
 			fill="gray", 
 			width=5
 		)
 
-		self.score_text = canvas.create_text(
-			canvas.width() - 10,
+		self.score_text = self.canvas.create_text(
+			self.canvas.width() - 10,
 			10, 
 			anchor=tk.NE,
 			text='', 
@@ -58,41 +61,41 @@ class Game :
 		self.loadScore()
 
 		# init score graphics
-		self.addScore(canvas, 0)
+		self.addScore(0)
 
 
-	def destroy(self, win, canvas) :
-		self.fleet.destroy(canvas)
-		self.player.destroy(canvas)
+	def destroy(self, win) :
+		self.fleet.destroy()
+		self.player.destroy()
 
-		canvas.delete(self.finish_line_gfx)
-		canvas.delete(self.game_over_text)
-		canvas.delete(self.replay_text)
-		canvas.delete(self.score_text)
+		self.canvas.delete(self.finish_line_gfx)
+		self.canvas.delete(self.game_over_text)
+		self.canvas.delete(self.replay_text)
+		self.canvas.delete(self.score_text)
 
 		for e in self.explosions :
-			e.destroy(canvas)
+			e.destroy()
 
 		win.unbind("<KeyPress>")
 		win.unbind("<KeyRelease>")
 		
 
-	def update(self, canvas, dt) :
+	def update(self, dt) :
 
 		# nothing to do on the game over screen
 		if self.game_over :
 			return
 
 		# update defender and fleet
-		self.player.update(canvas, dt, self.leftKey, self.rightKey, self.fireKey)
-		self.fleet.update(canvas, dt)
+		self.player.update(dt, self.leftKey, self.rightKey, self.fireKey)
+		self.fleet.update(dt)
 
 
 		# update explosions
 		for e in self.explosions :
-			e.update(canvas, dt)
+			e.update(dt)
 
-			if not e.alive :
+			if not e.isAlive() :
 				self.explosions.remove(e)
 
 
@@ -103,20 +106,19 @@ class Game :
 			if a.collision(b)
 		]
 
+		# handle bullets
 		for b in set(b for _, b in collisions) :
-			b.destroy(canvas)
+			b.destroy()
 			self.player.bullets.remove(b)
 
-
+		# handle aliens
 		for a in set(a for a, _ in collisions) :
-			a.destroy(canvas)
+			a.destroy()
 			self.fleet.aliens.remove(a)
-			
-			self.addScore(canvas, a.point_value)
-			self.boom(canvas, a.x, a.y)
-			
 
-
+			self.addScore(a.point_value)
+			self.boom(a.get_x(), a.get_y())
+			
 
 		# check if an alien bullet hits the player
 		collisions = [b 
@@ -125,51 +127,51 @@ class Game :
 		]
 
 		for b in collisions :
-			self.boom(canvas, self.player.x, self.player.y)
-			self.player.hit(canvas)
-			b.destroy(canvas)
+			self.boom(self.player.get_x(), self.player.get_y())
+			self.player.hit()
+			b.destroy()
 			self.fleet.bullets.remove(b)
 
 
 		# check if an alien has reach the finish line
 		if any(a.y + a.height >= self.finish_line for a in self.fleet.aliens) :
-			self.do_game_over(canvas)
-			return
+			self.do_game_over()
+
 
 		# check if the player is dead
-		if not self.player.alive :
-			self.do_game_over(canvas)
-			return
+		elif not self.player.isAlive() :
+			self.do_game_over()
+
 
 		# check if all the aliens are dead
-		if not self.fleet.aliens :
-			self.addScore(canvas, 10000)
-			self.do_game_over(canvas, text="YOU WIN !")
-			return
+		elif not self.fleet.aliens :
+			self.addScore(10000)
+			self.do_game_over(text="YOU WIN !")
 
 
-	def boom(self, canvas, x, y) :
-		e = Explosion(canvas, x, y)
+
+	def boom(self, x, y) :
+		e = Explosion(self.canvas, x, y)
 		self.explosions.append(e)
 
 		# show explosions behind other sprites
-		canvas.lower(e.sprite)
+		self.canvas.lower(e.sprite)
 
 
-	def do_game_over(self, canvas, text="GAME OVER !") :
+	def do_game_over(self, text="GAME OVER !") :
 		self.game_over = True
 
-		self.game_over_text = canvas.create_text(
-			canvas.width()/2,
-			canvas.height()/2, 
+		self.game_over_text = self.canvas.create_text(
+			self.canvas.width()/2,
+			self.canvas.height()/2, 
 			text=text, 
 			fill="white", 
 			font=('Arial 32 bold')
 		)
 
-		self.replay_text = canvas.create_text(
-			canvas.width()/2,
-			canvas.height() * 0.75, 
+		self.replay_text = self.canvas.create_text(
+			self.canvas.width()/2,
+			self.canvas.height() * 0.75, 
 
 			text="Press space to replay.", 
 			fill="white", 
@@ -179,7 +181,7 @@ class Game :
 		self.saveScore()
 
 
-	def addScore(self, canvas, n) :
+	def addScore(self, n) :
 		self.current_score += n
 
 		# uninitialized scores
@@ -192,7 +194,7 @@ class Game :
 			best_score = self.current_score
 			self.scores[self.player_name] = self.current_score
 
-		canvas.itemconfig(
+		self.canvas.itemconfig(
 			self.score_text, 
 			text=f"score: {self.current_score:06d}\nbest : {best_score:06d}"
 		)
@@ -201,21 +203,12 @@ class Game :
 	def loadScore(self, fname="scores") :
 
 		try :
-			fp = open(fname, 'r')
+			with open(fname, 'r') as fp :
+				self.scores = eval(fp.read())
 
 		except FileNotFoundError :
 			# ignore the procedure if the file doesn't exist
 			pass
-
-		else :
-			self.scores = {
-				m.group(1) : int(m.group(2))
-
-				for l in fp.readlines()
-				if (m := re.match(r"([a-zA-Z0-1]+):(\d+)", l))
-			}
-			
-			fp.close()
 
 
 		if self.player_name not in self.scores :
@@ -223,11 +216,8 @@ class Game :
 
 
 	def saveScore(self, fname="scores") :
-
 		with open(fname, 'w') as fp :
-			fp.write("\n".join(
-				f"{k}:{v}" for k,v in self.scores.items()
-			))
+			fp.write(str(self.scores))
 
 
 	def key_down(self, e) :
