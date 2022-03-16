@@ -6,7 +6,7 @@ class Alien(GameObject) :
 
 	images = None
 
-	def __init__(self, canvas, x=0, y=0, type=0) :
+	def __init__(self, canvas, x=0, y=0, vx=0, type=0) :
 		self.type = type # integer : not the built in type function
 
 		if Alien.images is None :
@@ -20,4 +20,7 @@ class Alien(GameObject) :
 
 		self.point_value = 100 * (self.type+1)
 
-		super().__init__(canvas, x=x, y=y, image=Alien.images[self.type % len(Alien.images)])
+		super().__init__(canvas, 
+			x=x, y=y, vx=vx,
+			image=Alien.images[self.type % len(Alien.images)
+		])

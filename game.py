@@ -87,6 +87,7 @@ class Game :
 		self.player.update(canvas, dt, self.leftKey, self.rightKey, self.fireKey)
 		self.fleet.update(canvas, dt)
 
+
 		# update explosions
 		for e in self.explosions :
 			e.update(canvas, dt)
@@ -96,42 +97,44 @@ class Game :
 
 
 		# check if player bullets hit aliens
-		for a in self.fleet.aliens :
-			for b in self.player.bullets :
+		collisions = [(a, b)
+			for a in self.fleet.aliens
+			for b in self.player.bullets
+			if a.collision(b)
+		]
 
-				if a.collision(b) :
-					a.destroy(canvas)
-					b.destroy(canvas)
+		for b in set(b for _, b in collisions) :
+			b.destroy(canvas)
+			self.player.bullets.remove(b)
 
-					self.boom(canvas, a.x, a.y)
-					self.addScore(canvas, a.point_value)
-					
-					self.fleet.aliens.remove(a)
-					self.player.bullets.remove(b)
 
-					# the alien has been removed,
-					# skip to the next one
-					break 
+		for a in set(a for a, _ in collisions) :
+			a.destroy(canvas)
+			self.fleet.aliens.remove(a)
+			
+			self.addScore(canvas, a.point_value)
+			self.boom(canvas, a.x, a.y)
+			
+
 
 
 		# check if an alien bullet hits the player
-		for b in self.fleet.bullets :
-			if self.player.collision(b) :
-				self.boom(canvas, self.player.x, self.player.y)
-				self.player.hit(canvas)
-				b.destroy(canvas)
-				self.fleet.bullets.remove(b)
+		collisions = [b 
+			for b in self.fleet.bullets
+			if self.player.collision(b)
+		]
+
+		for b in collisions :
+			self.boom(canvas, self.player.x, self.player.y)
+			self.player.hit(canvas)
+			b.destroy(canvas)
+			self.fleet.bullets.remove(b)
 
 
 		# check if an alien has reach the finish line
-		# if any([a.y + a.height >= self.finish_line for a in self.fleet.aliens]) :
-			# self.do_game_over(canvas)
-			# return
-		for a in self.fleet.aliens :
-			if a.y + a.height >= self.finish_line :
-				self.do_game_over(canvas)
-				return
-
+		if any(a.y + a.height >= self.finish_line for a in self.fleet.aliens) :
+			self.do_game_over(canvas)
+			return
 
 		# check if the player is dead
 		if not self.player.alive :
@@ -139,7 +142,7 @@ class Game :
 			return
 
 		# check if all the aliens are dead
-		if len(self.fleet.aliens) == 0 :
+		if not self.fleet.aliens :
 			self.addScore(canvas, 10000)
 			self.do_game_over(canvas, text="YOU WIN !")
 			return
@@ -197,34 +200,34 @@ class Game :
 
 	def loadScore(self, fname="scores") :
 
-
 		try :
 			fp = open(fname, 'r')
 
-			for l in fp.readlines() :
-				if m := re.match(r"([a-zA-Z0-1]+):(\d+)", l) :
-					score = int(m.group(2))
-					player = m.group(1)
+		except FileNotFoundError :
+			# ignore the procedure if the file doesn't exist
+			pass
 
-					# keep the biggest score if it already exists
-					if player not in self.scores or self.scores[player] < score :
-						self.scores[player] = score 
+		else :
+			self.scores = {
+				m.group(1) : int(m.group(2))
 
+				for l in fp.readlines()
+				if (m := re.match(r"([a-zA-Z0-1]+):(\d+)", l))
+			}
+			
 			fp.close()
 
-
-		# ignore the procedure if the file doesn't exist
-		except FileNotFoundError :
-			pass
 
 		if self.player_name not in self.scores :
 			self.scores[self.player_name] = self.current_score
 
+
 	def saveScore(self, fname="scores") :
 
 		with open(fname, 'w') as fp :
-			for k, v in self.scores.items() :
-				fp.write(f"{k}:{v}\n")
+			fp.write("\n".join(
+				f"{k}:{v}" for k,v in self.scores.items()
+			))
 
 
 	def key_down(self, e) :

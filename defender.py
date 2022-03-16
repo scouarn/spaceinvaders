@@ -19,16 +19,15 @@ class Defender(GameObject) :
 
 		self.vx = 200
 
-		self.lives = []
-
-		for i in range(hp) :
-			s = canvas.create_image(
+		self.lives = [
+			canvas.create_image(
 				i * self.width, 0,
 				image=Defender.image, 
 				anchor=tk.NW
 			)
 
-			self.lives.append(s)
+			for i in range(hp)
+		]
 
 		self.reload_bar = canvas.create_rectangle(
 			0, 0, 0, 0, # set later
@@ -48,7 +47,7 @@ class Defender(GameObject) :
 		for l in self.lives :
 			canvas.delete(l)
 
-		for b in self.bullets :
+		for b in self.bullets : 
 			b.destroy(canvas)
 
 		canvas.delete(self.reload_bar)

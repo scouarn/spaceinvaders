@@ -25,20 +25,20 @@ class Fleet(GameObject) :
 		self.interval = 0.5
 		self.timer = 0.0
 
-		self.aliens = []
 
 		xoff = 0
 		yoff = 64
 	
-		for i in range(self.cols) :
-			for j in range(self.rows) :
-				x = xoff + i * self.spacing
-				y = yoff + j * self.spacing
-
-				a = Alien(canvas, x=x, y=y, type=self.rows-j-1)
-				a.set_vel(self.vx, 0)
-				
-				self.aliens.append(a)
+		self.aliens = [
+			Alien(canvas, 
+				x=xoff + i * self.spacing, 
+				y=yoff + j * self.spacing, 
+				vx=self.vx, 
+				type=self.rows-j-1
+			)
+			for i in range(self.cols)
+			for j in range(self.rows)
+		]
 
 
 
@@ -54,6 +54,7 @@ class Fleet(GameObject) :
 
 	def update(self, canvas, dt) :
 
+		# attack
 		self.timer -= dt
 		if self.timer <= 0 :
 			self.timer = self.interval
@@ -66,22 +67,21 @@ class Fleet(GameObject) :
 
 		for b in self.bullets :
 			b.update(canvas, dt)
-
-
-		collided = False
 		
 		for a in self.aliens :
 			a.update(canvas, dt)
 
-			if a.screen_collision(canvas) :
-				collided = True
 
 
 		# speed up and reverse direction
+		collided = any(
+			a.screen_collision(canvas) 
+			for a in self.aliens
+		)
+
 		if collided :
 			self.vx *= -self.acc
 
 			for a in self.aliens :
 				a.vx = self.vx
 				a.y += self.vy
-

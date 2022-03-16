@@ -4,11 +4,11 @@ import tkinter as tk
 # generic game object
 class GameObject :
 
-	def __init__(self, canvas, x=0, y=0, image=None) :
+	def __init__(self, canvas, x=0, y=0, vx=0, vy=0, image=None) :
 		self.x = x
 		self.y = y
-		self.vx = 0
-		self.vy = 0
+		self.vx = vx
+		self.vy = vy
 
 		if image is None :
 			self.width = self.height = 0
@@ -60,7 +60,6 @@ class GameObject :
 
 
 	def screen_collision(self, canvas) :
-
 		return any([
 			self.x < 0,
 			self.y < 0,
@@ -70,7 +69,9 @@ class GameObject :
 
 
 	def collision(o1, o2) :
-		H = o1.x + o1.width  >= o2.x and o1.x <= o2.x + o2.width
-		V = o1.y + o1.height >= o2.y and o1.y <= o2.y + o2.height
-
-		return H and V
+		return all([
+			o1.x + o1.width >= o2.x,
+			o1.y + o1.height >= o2.y,
+			o1.x <= o2.x + o2.width,
+			o1.y <= o2.y + o2.height,
+		])
