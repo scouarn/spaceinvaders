@@ -13,6 +13,7 @@
 ## Index des classes
 
 * SpaceInvaders
+* Canvas
 * Game
 * GameObject :
 	* Defender
@@ -33,13 +34,12 @@ Rq : récupérer la taille du canvas n'est pas fiable (toujours de 1,1 au début
 self.canvas.width  = lambda : self.width
 self.canvas.height = lambda : self.height
 
-puis appel avec self.canvas.width()
+puis appel avec self.canvas.get_width()
 
 
 ## Structure :
 * width, height : taille voulue de la zone graphique
-* win : fenêtre tkinter
-* canvas : widget canvas tkinter
+* canvas : instance de Canvas (fenêtre)
 * frameRate : fréquence de rafraichissement voulue
 * running : indique si l'application (la boucle principale) est active
 * game : instance de Game
@@ -52,6 +52,18 @@ puis appel avec self.canvas.width()
 * mise à jour de la fenêtre
 
 
+
+# Canvas
+
+Dépend de tk.Tk, wrapper pour la fenêtre et l'audio.
+
+## Structure :
+* tkcanvas : widget tk pour le dessin
+* width, height : dimensions demandées
+
+## Responsabilités :
+* partage de l'accès à la fenêtre et à l'audio
+* transmissions des messages tk vers le membre tkcanvas
 
 
 # Game

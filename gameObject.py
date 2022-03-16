@@ -94,8 +94,8 @@ class GameObject :
 		return any([
 			self.x < 0,
 			self.y < 0,
-			self.x + self.width >= self.canvas.width(),
-			self.y + self.height >= self.canvas.height()
+			self.x + self.width >= self.canvas.get_width(),
+			self.y + self.height >= self.canvas.get_height()
 		])
 
 

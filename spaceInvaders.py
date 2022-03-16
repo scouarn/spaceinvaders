@@ -2,40 +2,24 @@ import time
 import tkinter as tk
 
 from game import Game
+from canvas import Canvas
+
+
 
 
 class SpaceInvaders :
 	
 	def __init__(self) :
 		
-		self.width = 800
-		self.height = 600
-
-		self.win = tk.Tk()
-		self.win.title("Space Invaders")
-
-		self.canvas = tk.Canvas(
-			self.win, 
-			width=self.width,
-			height=self.height,
-			background="black",
-			highlightthickness=0,
-		)
-
-		self.canvas.place(relx=0.5, rely=0.5, anchor="center")
-
-		# !!! custom methods for self.canvas so it can relay self.width
-		# when self.canvas.width() is called
-		self.canvas.width  = lambda : self.width
-		self.canvas.height = lambda : self.height
-
+		self.canvas = Canvas(800, 600, "Space Invaders")
+		
 		# escape to quit
-		self.win.bind('<Escape>',  lambda ev : self.stop())
-		self.win.bind('<Destroy>', lambda ev : self.stop())
+		self.canvas.bind('<Escape>',  lambda ev : self.stop())
+		self.canvas.bind('<Destroy>', lambda ev : self.stop())
 
 		self.frameRate = 60
 		self.running = False
-		self.game = Game(self.win, self.canvas)
+		self.game = Game(self.canvas)
 
 
 	def stop(self) :
@@ -62,10 +46,10 @@ class SpaceInvaders :
 			# handle post game over
 			if self.game.done :
 				self.game.destroy()
-				self.game = Game(self.win, self.canvas)
+				self.game = Game(self.canvas)
 
 
-			self.win.update()
+			self.canvas.update()
 
 			# limit fps
 			dt = time.time() - self.lastTime
@@ -74,4 +58,5 @@ class SpaceInvaders :
 			if wait > 0 :
 				time.sleep(wait)
 
-		self.win.destroy()
+
+		self.canvas.destroy()

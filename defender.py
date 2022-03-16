@@ -59,7 +59,7 @@ class Defender(GameObject) :
 		if Lkey and self.x > 0 :
 			self.x -= self.vx * dt
 
-		if Rkey and self.x + self.width < self.canvas.width() :
+		if Rkey and self.x + self.width < self.canvas.get_width() :
 			self.x += self.vx * dt
 
 		# handle shooting
@@ -75,9 +75,9 @@ class Defender(GameObject) :
 		self.canvas.coords(
 			self.reload_bar, 
 			0, 
-			self.canvas.height()-10, 
-			x * self.canvas.width(), 
-			self.canvas.height()
+			self.canvas.get_height()-10, 
+			x * self.canvas.get_width(), 
+			self.canvas.get_height()
 		)
 
 		color = 'orange' if self.timer > 0 else 'green'

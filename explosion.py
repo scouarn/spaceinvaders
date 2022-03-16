@@ -2,7 +2,6 @@ import tkinter as tk
 import random
 
 from gameObject import GameObject
-from audio import play_wav
 
 class Explosion(GameObject) :
 	
@@ -25,7 +24,7 @@ class Explosion(GameObject) :
 
 		self.timer = timer
 
-		play_wav(random.choice(Explosion.sounds))
+		self.canvas.play_wav(random.choice(Explosion.sounds))
 
 
 	def update(self, dt) :

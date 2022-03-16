@@ -1,7 +1,6 @@
 from defender import Defender
 from fleet import Fleet
 from explosion import Explosion
-import audio
 
 import tkinter as tk
 import re
@@ -12,17 +11,16 @@ class Game :
 	sound_lose = "assets/lose.wav"
 	sound_win  = "assets/win.wav"
 
-	def __init__(self, win, canvas) :
+	def __init__(self, canvas) :
 		self.canvas = canvas
-		self.win = win
 
 		self.fleet = Fleet(self.canvas)
-		self.finish_line = self.canvas.height() * 0.8
+		self.finish_line = self.canvas.get_height() * 0.8
 
 		self.player = Defender(self.canvas)
 		self.player.set_pos(
-			self.canvas.width() / 2, 
-			(self.finish_line + self.canvas.height() - Defender.image.height()) / 2)
+			self.canvas.get_width() / 2, 
+			(self.finish_line + self.canvas.get_height() - Defender.image.height()) / 2)
 
 
 		self.explosions = []
@@ -38,21 +36,21 @@ class Game :
 
 
 
-		self.win.bind("<KeyPress>", self.key_down)
-		self.win.bind("<KeyRelease>", self.key_up)
+		self.canvas.bind("<KeyPress>", self.key_down)
+		self.canvas.bind("<KeyRelease>", self.key_up)
 	
 
 		self.finish_line_gfx = self.canvas.create_line(
 			0, 
 			self.finish_line,
-			self.canvas.width(), 
+			self.canvas.get_width(), 
 			self.finish_line, 
 			fill="gray", 
 			width=5
 		)
 
 		self.score_text = self.canvas.create_text(
-			self.canvas.width() - 10,
+			self.canvas.get_width() - 10,
 			10, 
 			anchor=tk.NE,
 			text='', 
@@ -81,8 +79,8 @@ class Game :
 		for e in self.explosions :
 			e.destroy()
 
-		self.win.unbind("<KeyPress>")
-		self.win.unbind("<KeyRelease>")
+		self.canvas.unbind("<KeyPress>")
+		self.canvas.unbind("<KeyRelease>")
 		
 
 	def update(self, dt) :
@@ -174,21 +172,21 @@ class Game :
 			text = "YOU WIN !"
 			sound = Game.sound_win
 
-		audio.stop_all()
-		audio.play_wav(sound)
+		self.canvas.stop_all()
+		self.canvas.play_wav(sound)
 
 
 		self.game_over_text = self.canvas.create_text(
-			self.canvas.width()/2,
-			self.canvas.height()/2, 
+			self.canvas.get_width()/2,
+			self.canvas.get_height()/2, 
 			text=text, 
 			fill="white", 
 			font=('Arial 32 bold')
 		)
 
 		self.replay_text = self.canvas.create_text(
-			self.canvas.width()/2,
-			self.canvas.height() * 0.75, 
+			self.canvas.get_width()/2,
+			self.canvas.get_height() * 0.75, 
 
 			text="Press space to replay.", 
 			fill="white", 

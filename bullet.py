@@ -1,7 +1,6 @@
 import tkinter as tk
 import random
 
-from audio import play_wav
 from gameObject import GameObject
 
 class Bullet(GameObject) :
@@ -24,4 +23,4 @@ class Bullet(GameObject) :
 		self.vy = vy
 
 		if dosfx :
-			play_wav(random.choice(Bullet.sounds))
+			self.canvas.play_wav(random.choice(Bullet.sounds))
