@@ -11,6 +11,8 @@ class Game :
 
 	def __init__(self, win, canvas) :
 		self.canvas = canvas
+		self.win = win
+
 		self.fleet = Fleet(self.canvas)
 		self.finish_line = self.canvas.height() * 0.8
 
@@ -33,8 +35,8 @@ class Game :
 
 
 
-		win.bind("<KeyPress>", self.key_down)
-		win.bind("<KeyRelease>", self.key_up)
+		self.win.bind("<KeyPress>", self.key_down)
+		self.win.bind("<KeyRelease>", self.key_up)
 	
 
 		self.finish_line_gfx = self.canvas.create_line(
@@ -64,7 +66,7 @@ class Game :
 		self.addScore(0)
 
 
-	def destroy(self, win) :
+	def destroy(self) :
 		self.fleet.destroy()
 		self.player.destroy()
 
@@ -76,8 +78,8 @@ class Game :
 		for e in self.explosions :
 			e.destroy()
 
-		win.unbind("<KeyPress>")
-		win.unbind("<KeyRelease>")
+		self.win.unbind("<KeyPress>")
+		self.win.unbind("<KeyRelease>")
 		
 
 	def update(self, dt) :

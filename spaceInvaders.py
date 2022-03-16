@@ -61,7 +61,7 @@ class SpaceInvaders :
 
 			# handle post game over
 			if self.game.done :
-				self.game.destroy(self.win)
+				self.game.destroy()
 				self.game = Game(self.win, self.canvas)
 
 
