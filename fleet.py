@@ -57,7 +57,7 @@ class Fleet(GameObject) :
 			self.timer = self.interval
 
 			a = random.choice(self.aliens)
-			b = Bullet(self.canvas, a.get_x()+32, a.get_y(), 350)
+			b = Bullet(self.canvas, a.get_x()+32, a.get_y(), 350, dosfx=False)
 			self.bullets.append(b)
 
 

@@ -1,6 +1,7 @@
 from defender import Defender
 from fleet import Fleet
 from explosion import Explosion
+import audio
 
 import tkinter as tk
 import re
@@ -8,6 +9,8 @@ import re
 
 class Game :
 
+	sound_lose = "assets/lose.wav"
+	sound_win  = "assets/win.wav"
 
 	def __init__(self, win, canvas) :
 		self.canvas = canvas
@@ -148,7 +151,7 @@ class Game :
 		# check if all the aliens are dead
 		elif not self.fleet.aliens :
 			self.addScore(10000)
-			self.do_game_over(text="YOU WIN !")
+			self.do_game_over()
 
 
 
@@ -160,8 +163,20 @@ class Game :
 		self.canvas.lower(e.sprite)
 
 
-	def do_game_over(self, text="GAME OVER !") :
+	def do_game_over(self, win=False) :
 		self.game_over = True
+
+		if win : 
+			text = "GAME OVER !"
+			sound = Game.soud_lose
+
+		else :
+			text = "YOU WIN !"
+			sound = Game.sound_win
+
+		audio.stop_all()
+		audio.play_wav(sound)
+
 
 		self.game_over_text = self.canvas.create_text(
 			self.canvas.width()/2,

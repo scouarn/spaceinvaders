@@ -1,10 +1,20 @@
 import tkinter as tk
+import random
 
 from gameObject import GameObject
+from audio import play_wav
 
 class Explosion(GameObject) :
 	
 	image = None
+
+	sounds = [
+		"assets/explosion1.wav",
+		"assets/explosion2.wav",
+		"assets/explosion3.wav",
+		"assets/explosion4.wav",
+		"assets/explosion5.wav",
+	]
 
 	def __init__(self, canvas, x, y, timer=1.0) :
 
@@ -15,6 +25,7 @@ class Explosion(GameObject) :
 
 		self.timer = timer
 
+		play_wav(random.choice(Explosion.sounds))
 
 
 	def update(self, dt) :
