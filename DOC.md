@@ -59,11 +59,12 @@ Dépend de tk.Tk, wrapper pour la fenêtre et l'audio.
 
 ## Structure :
 * tkcanvas : widget tk pour le dessin
+* tkframe  : widget tk qui contient le canvas
 * width, height : dimensions demandées
 
 ## Responsabilités :
 * partage de l'accès à la fenêtre et à l'audio
-* transmissions des messages tk vers le membre tkcanvas
+* gestion des messages tk vers la fenêtre/le canvas
 
 
 # Game
