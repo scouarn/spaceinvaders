@@ -35,6 +35,7 @@ class Canvas(tk.Tk) :
 		self.moveto = self.tkcanvas.moveto
 		self.delete = self.tkcanvas.delete
 		self.lower = self.tkcanvas.lower
+		self.after = self.tkcanvas.after
 
 
 	def destroy(self) :

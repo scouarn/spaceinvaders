@@ -149,7 +149,7 @@ class Game :
 		# check if all the aliens are dead
 		elif not self.fleet.aliens :
 			self.addScore(10000)
-			self.do_game_over()
+			self.do_game_over(win=True)
 
 
 
@@ -165,12 +165,12 @@ class Game :
 		self.game_over = True
 
 		if win : 
-			text = "GAME OVER !"
-			sound = Game.soud_lose
-
-		else :
 			text = "YOU WIN !"
 			sound = Game.sound_win
+
+		else :
+			text = "GAME OVER !"
+			sound = Game.sound_lose
 
 		self.canvas.stop_all()
 		self.canvas.play_wav(sound)

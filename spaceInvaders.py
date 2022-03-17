@@ -27,36 +27,30 @@ class SpaceInvaders :
 		self.running = False
 
 
+	def frame(self) :
+
+		# compute elapsed time
+		now = time.time()
+		dt = now - self.lastTime
+		self.lastTime = now
+
+		self.game.update(dt)
+
+		# restart on game over
+		if self.game.done :
+			self.game.destroy()
+			self.game = Game(self.canvas)
+
+		if self.running :
+			self.canvas.tkcanvas.after(1000 // self.frameRate, self.frame)
+
+		else :
+			self.canvas.destroy()
+
 	def start(self) :
 
 		self.lastTime = time.time()
 		self.running = True
-
-
-		while self.running :
-
-			# compute elapsed time
-			now = time.time()
-			dt = now - self.lastTime
-			self.lastTime = now
-
-
-			self.game.update(dt)
-
-			# handle post game over
-			if self.game.done :
-				self.game.destroy()
-				self.game = Game(self.canvas)
-
-
-			self.canvas.update()
-
-			# limit fps
-			dt = time.time() - self.lastTime
-			wait = 1/self.frameRate - dt
-
-			if wait > 0 :
-				time.sleep(wait)
-
-
-		self.canvas.destroy()
+		self.canvas.tkcanvas.after(0, self.frame)
+		self.canvas.mainloop()
+		
