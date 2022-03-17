@@ -12,17 +12,19 @@ class Canvas(tk.Tk) :
 		self.title(title)
 		self.width = width
 		self.height = height
-		
+			
+		self.tkframe = tk.Frame(self)
+		self.tkframe.place(relx=0.5, rely=0.5, anchor="center")
+
 		self.tkcanvas = tk.Canvas(
-			self, 
+			self.tkframe, 
 			width=self.width,
 			height=self.height,
 			background="black",
 			highlightthickness=0,
 		)
 
-
-		self.tkcanvas.place(relx=0.5, rely=0.5, anchor="center")
+		self.tkcanvas.pack()
 
 
 		# transmit messages directly to tkcanvas

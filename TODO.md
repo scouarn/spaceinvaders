@@ -6,8 +6,6 @@
 
 # IMPROVEMENTS :
 
-* "Frame contenant le canvas"
-
 * hit method for fleet / alien ?
 * immunity frames
 * aliens not shooting through each other
