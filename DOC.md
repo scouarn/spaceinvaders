@@ -82,6 +82,7 @@ Logique principale du jeu.
 * player_name : nom du joueur dans la liste des scores
 * current_score : nombre de points gagnés lors de la partie
 * scores : dictionnaire liant un nom de joueur à son meilleur score
+* canvas : instance de Canvas 
 
 ## Responsabilités :
 * contrôles propres au jeu : mise à jour des variables leftKey, rightKey et fireKey  
@@ -106,7 +107,7 @@ Classe générique pour les objets qui ont une position, une vitesse et un sprit
 * alive : booléen 
 * sprite : tag d'object image sur le canvas
 * width, height : taille en pixel du sprite
-
+* canvas : instance de Canvas 
 
 ## Responsabilités :
 * calcul de collision entre deux objets ou avec les bords de l'écran
