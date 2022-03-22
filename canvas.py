@@ -39,20 +39,17 @@ class Canvas(tk.Tk) :
 		self.lower = self.tkcanvas.lower
 		self.after = self.tkcanvas.after
 
+		# """"" to the audio module
+		self.play_wav = audio.play_wav
+		self.stop_all = audio.stop_all
+
 
 	def destroy(self) :
 		self.stop_all()
 		super().destroy()
-
 
 	def get_width(self) :
 		return self.width
 
 	def get_height(self) :
 		return self.height
-
-	def play_wav(self, fname) :
-		audio.play_wav(fname)
-	
-	def stop_all(self) :
-		audio.stop_all()

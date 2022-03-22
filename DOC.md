@@ -2,12 +2,28 @@
 # Intro
 
 ## Libertés prises :
-* Ajout d'une classe GameObject pour factoriser le code commun à plusieurs classes
+* Ajout d'une classe GameObject pour factoriser le code commun à presque toutes les classes
 
 * Ajout d'explosions
 
 * Au lieu de pouvoir tirer aussi vite que l'on veut avec une limite projectile, maintenant on peut en tirer autant que l'on veut mais avec un interval minimum de rechargement entre 2 tirs.
 
+## Remmarques :
+* Les scores sont stockés dans le fichier texte `scores` sous le format dictionnaire Pyton `{JOUEUR : SCORE}` pour pouvoir être manipulé facilement avec `str` et `eval`.
+
+
+## Problèmes :
+
+* tableau des scores non implémentés : il faudrait pouvoir 
+insérer son nom et afficher dans l'ordre les scores des autres joueurs, le code permet déjà de sauvegarder les scores de plusieurs joueurs.
+
+* Redondance de code entre Defender et Fleet pour le tir de projectiles
+
+* canvas/tk pas adapté à ce type d'application
+
+* pas d'audio facilement portable sans utiliser un module tier. Solution actuelle non testée sous windows, pas d'implémentation pour mac, pour linux il faut avoir le paquet ffmpeg/ffplay (assez commun). 
+
+* trop facile d'avoir le score maximal (16000pts) : ajouter des points bonus/malus pour les vies qu'il reste (si victoire), le nombre de balles ratées, la hauteur minimal des aliens au cours de la partie, ordre de destruction des aliens...
 
 
 ## Index des classes
@@ -27,35 +43,25 @@
 
 # SpaceInvaders
 
-Gère la fenêtre et la boucle principale.
-
-Rq : récupérer la taille du canvas n'est pas fiable (toujours de 1,1 au début), pour éviter d'avoir à donner des arguments supplémentaires dans chaque méthode, une MÉTHODE est AJOUTÉE à canvas pour retourner la taille définie dans l'instance de SpaceInvader :
-
-self.canvas.width  = lambda : self.width
-self.canvas.height = lambda : self.height
-
-puis appel avec self.canvas.get_width()
+Gère la fenêtre et la boucle principale de l'application.
 
 
 ## Structure :
-* width, height : taille voulue de la zone graphique
 * canvas : instance de Canvas (fenêtre)
-* frameRate : fréquence de rafraichissement voulue
-* running : indique si l'application (la boucle principale) est active
+* running : indique si l'application est active
 * game : instance de Game
 
 
-## Responsabilités :
-* calcul du temps écoulé entre deux itérations de la boucle principale
-* bridage de la boucle pour ne pas dépasser la fréquence de rafraichissement voulue
-* mise à jour et (ré)initialiser game lorsqu'il a terminé (cf Game.done)
-* mise à jour de la fenêtre
+## Responsabilités :s
+* calcul du temps écoulé entre deux itérations de la "boucle" principale
+* mise à jour de game
+* (ré)initialiser game lorsqu'il a terminé
 
 
 
 # Canvas
 
-Dépend de tk.Tk, wrapper pour la fenêtre et l'audio.
+Dépend de tk.Tk, wrapper pour la fenêtre et pour l'audio.
 
 ## Structure :
 * tkcanvas : widget tk pour le dessin
@@ -77,22 +83,21 @@ Logique principale du jeu.
 * fleet : instance de Fleet
 * explosions : une collection d'instances d'Explosion
 * game_over_text / replay_text / score_text : tag d'objet canvas pour le texte
-* leftKey, rightKey, fireKey : booléens indiquant si les touches de déplacement et de tire sont pressées
+* keys : booléens indiquant si les touches de déplacement et de tire sont enfoncées
 * game_over : booléen indiquant que le jeu est sur l'écran de game over
-* done : booléen indiquant que le jeu est terminé et que l'instance est prête à être détruite pour une autre partie ou bien pour arrêter (l'écran game over s'est affiché et le joueur a appuyé sur espace pour rejouer)
-* player_name : nom du joueur dans la liste des scores
+* done : booléen indiquant que le jeu est terminé (l'écran game over s'est affiché et le joueur a appuyé sur espace pour rejouer/quitter)
+* player_name : nom du joueur
 * current_score : nombre de points gagnés lors de la partie
 * scores : dictionnaire liant un nom de joueur à son meilleur score
 * canvas : instance de Canvas 
 
 ## Responsabilités :
 * contrôles propres au jeu : mise à jour des variables leftKey, rightKey et fireKey  
-* mise à jour de player et fleet
-* mise à jour de explosions et destruction des explosion "mortes"/dissipées
-* comptabilisation des points et mise à jour du fichier avec les meilleurs scores
-* collision entre les projectiles du joueur et la flotte : explosion et destruction de l'alien et gain de points
-* collision entre les projectiles de la flotte et le joueur : explosion et perte d'une vie du joueur
-* détection de fin de partie/game over/win : le joueur n'a plus de vies, les aliens ont atteint le bas de l'écran (ligne grise "finish_line") ou tous les aliens sont détruits
+* mise à jour de player, fleet et des explosion
+* comptabilisation des points et mise à jour du fichier avec les highscores
+* collision entre les projectiles du joueur et la flotte : explosion, destruction de l'alien et gain de points
+* collision entre les projectiles de la flotte et le joueur : explosion et perte d'une vie
+* détection de fin de partie : le joueur n'a plus de vies, les aliens ont atteint le bas de l'écran ou bien tous les aliens sont détruits
 * affichage de l'écran game over
  
 
@@ -101,6 +106,8 @@ Logique principale du jeu.
 # GameObject
 
 Classe générique pour les objets qui ont une position, une vitesse et un sprite. 
+
+Variables de classe : sound_lose/sound_win les fichiers audio joués à la fin de la partie.
 
 ## Structure :
 * x, y : position en pixels
@@ -111,9 +118,10 @@ Classe générique pour les objets qui ont une position, une vitesse et un sprit
 * canvas : instance de Canvas 
 
 ## Responsabilités :
-* calcul de collision entre deux objets ou avec les bords de l'écran
-* raffraichissement/destruction du sprite à l'écran
-* mettre à jour sa position en fonction de sa vitesse et du temps écoulé depuis la denière mise à jour (dt)
+* calcul de collision avec un autre GameObject
+* calcul de collision avec les bords de l'écran
+* raffraichissement du sprite à l'écran
+* mettre à jour sa position en fonction de sa vitesse et du temps écoulé depuis la denière mise à jour (x = intégration de vx en fonction de dt)
 
 
 
@@ -178,10 +186,11 @@ La classe Alien est pratiquement vide, tout étant déjà géré par la classe p
 ## Structure :
 * type : indique quel image utiliser pour le sprite (indice dans la liste), pourra éventuellement indiquer le nombre de points que vaut l'alien.
 
-* point_value : nombre de points que vaut l'alien
-
 ## Responsabilités :
-Aucune (sauf chargement du fichier image)
+
+* calculer le nombre de points que vaut l'alien au moment
+de sa destruction
+
 
 
 
@@ -191,6 +200,8 @@ Aucune (sauf chargement du fichier image)
 Dépend de GameObject.
 
 Variable de classe : image, fichier image qui est chargé lors de la première instanciation de la classe.
+
+Variable de classe : sounds, liste des fichiers audio joués lorsqu'un projectile est tiré/instancié.
 
 La classe Bullet est pratiquement vide, tout étant déjà géré par la classe parente ou bien le propriétaire des objets (Defender ou Fleet suivant les cas).
 
@@ -211,12 +222,10 @@ Dépend de GameObject.
 
 Variable de classe : image, fichier image qui est chargé lors de la première instanciation de la classe.
 
+Variable de classe : sounds, liste des fichiers audio joués lorsqu'une explosion se produit / est instanciée.
+
 ## Structure :
 * timer : temps restant avant que l'explosion de se dissipe
 
 ## Responsabilités :
-* "tuer"/dissper l'explosion et la retirer du canvas lorsque le temps est écoulé
-
-
-
-
+* se retirer du canvas lorsque le temps est écoulé (et mettre self.alive à False)

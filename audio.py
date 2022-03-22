@@ -1,8 +1,12 @@
-try :
+import platform
+os = platform.system() 
+
+
+if os == "Windows" :
 
 	import winsound
 
-	print("Warning, windows version not tested !")
+	print("Warning : windows audio implementation not tested !")
 
 	def play_wav(fname) :
 		winsound.Playsound(fname, 
@@ -13,7 +17,7 @@ try :
 		winsound.PlaySound(None, winsound.SND_PURGE)
 
 
-except ModuleNotFoundError :
+elif os == "Linux" :
 	import subprocess
 
 	processes = []
@@ -21,7 +25,8 @@ except ModuleNotFoundError :
 
 	def play_wav(fname) :
 		volume = 75
-		p = subprocess.Popen(['ffplay', '-nodisp', '-autoexit', '-volume', str(volume), fname],
+		p = subprocess.Popen(
+			['ffplay', '-nodisp', '-autoexit', '-volume', str(volume), fname],
 			stdout=subprocess.DEVNULL,
 			stderr=subprocess.DEVNULL,
 		)
@@ -34,5 +39,13 @@ except ModuleNotFoundError :
 			processes.pop().kill()
 
 
-if __name__ == "__main__" :
-	pass
+else :
+	print("Warning : audio not implemented for this platform.")
+
+	def play_wav(fname) :
+		pass
+
+	def stop_all() :
+		pass
+
+

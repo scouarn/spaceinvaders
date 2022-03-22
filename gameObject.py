@@ -9,7 +9,9 @@ class GameObject :
 		self.y = y
 		self.vx = vx
 		self.vy = vy
+		self.acc = 0
 		self.canvas = canvas
+		self.alive = True
 
 		if image is None :
 			self.width = self.height = 0
@@ -18,12 +20,11 @@ class GameObject :
 			self.width = image.width()
 			self.height = image.height()
 
-		self.alive = True
 
 		self.sprite = self.canvas.create_image(
 			self.x, self.y,
 			image=image, 
-			anchor=tk.NW
+			anchor=tk.NW # top left
 		)
 
 
@@ -45,9 +46,30 @@ class GameObject :
 
 		self.update_sprite()
 
-		return False # True for game over
 
-	def isAlive(self) :
+
+	def screen_collision(self) :
+		return any([
+			self.x < 0, # left
+			self.y < 0, # top
+			self.x + self.width >= self.canvas.get_width(), # right
+			self.y + self.height >= self.canvas.get_height() # bottom
+		])
+
+
+	def collision(o1, o2) :
+		return all([
+			# horizontal overlap
+			o1.x + o1.width >= o2.x,
+			o1.x <= o2.x + o2.width,
+
+			# vertical overlap
+			o1.y + o1.height >= o2.y,
+			o1.y <= o2.y + o2.height,
+		])
+
+
+	def is_alive(self) :
 		return self.alive
 
 	def get_x(self) :
@@ -56,11 +78,17 @@ class GameObject :
 	def set_x(self, x) :
 		self.x = x
 
+	def add_x(self, dx) :
+		self.x += dx
+
 	def get_y(self) :
 		return self.y
 
-	def set_x(self, y) :
+	def set_y(self, y) :
 		self.y = y
+
+	def add_y(self, dy) :
+		self.y += dy
 
 	def get_vx(self) :
 		return self.vx
@@ -71,10 +99,9 @@ class GameObject :
 	def get_vy(self) :
 		return self.vy
 
-	def set_x(self, vy) :
+	def set_vy(self, vy) :
 		self.vy = vy
 	
-
 	def set_pos(self, x, y) :
 		self.x = x
 		self.y = y
@@ -89,20 +116,8 @@ class GameObject :
 	def get_vel(self) :
 		return self.vx, self.vy
 
+	def get_width(self) :
+		return self.width
 
-	def screen_collision(self) :
-		return any([
-			self.x < 0,
-			self.y < 0,
-			self.x + self.width >= self.canvas.get_width(),
-			self.y + self.height >= self.canvas.get_height()
-		])
-
-
-	def collision(o1, o2) :
-		return all([
-			o1.x + o1.width >= o2.x,
-			o1.y + o1.height >= o2.y,
-			o1.x <= o2.x + o2.width,
-			o1.y <= o2.y + o2.height,
-		])
+	def get_height(self) :
+		return self.height

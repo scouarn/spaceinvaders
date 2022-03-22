@@ -1,7 +1,8 @@
-
-
-# BUGS :
-
+defender capable de tirer 10pts
+flotte : 12pts 
+collision bullet-alien : 14pts
+améliorations :  0-4pts
+rapport -> paragraphe sur l'IA wtf ??? : 2pts
 
 
 # IMPROVEMENTS :

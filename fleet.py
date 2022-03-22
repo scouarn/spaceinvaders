@@ -31,23 +31,38 @@ class Fleet(GameObject) :
 				x=i * self.spacing, 
 				y=j * self.spacing + 64, 
 				vx=self.vx, 
-				type=self.rows-j-1
+				type=self.rows-j-1 # weakest at the bottom
 			)
 			for i in range(self.cols)
 			for j in range(self.rows)
 		]
 
 
+	def __iter__(self) :
+		return iter(self.aliens)
+
+	def __len__(self) :
+		return len(self.aliens)
+
+	def remove_bullet(self, b) :
+		b.destroy()
+		self.bullets.remove(b)		
+
+	def remove(self, a) :
+		a.destroy()
+		self.aliens.remove(a)
+
 
 	def destroy(self) :
 		super().destroy()
 
-		for a in self.aliens :
+		for a in self :
 			a.destroy()
 
 		for b in self.bullets :
 			b.destroy()
 			
+
 
 	def update(self, dt) :
 
@@ -55,30 +70,42 @@ class Fleet(GameObject) :
 		self.timer -= dt
 		if self.timer <= 0 :
 			self.timer = self.interval
+			self.fire()
 
-			a = random.choice(self.aliens)
-			b = Bullet(self.canvas, a.get_x()+32, a.get_y(), 350, dosfx=False)
-			self.bullets.append(b)
-
-
+		for a in self :
+			a.update(dt)
 
 		for b in self.bullets :
 			b.update(dt)
 		
-		for a in self.aliens :
-			a.update(dt)
-
 
 
 		# speed up and reverse direction
-		collided = any(
-			a.screen_collision() 
-			for a in self.aliens
-		)
+		if self.screen_collision() :
 
-		if collided :
 			self.vx *= -self.acc
 
-			for a in self.aliens :
-				a.vx = self.vx
-				a.y += self.vy
+			for a in self :
+				a.set_vx(self.vx) 
+				a.add_y(self.vy) 
+
+
+	def fire(self) :
+
+		a = random.choice(self.aliens)
+
+		x = a.get_x() + a.get_width() / 2
+		y = a.get_y() + a.get_height()
+		vy = 350
+		
+		self.bullets.append(
+			Bullet(self.canvas, x, y, vy, dosfx=False)
+		)
+
+
+	def screen_collision(self) :
+		return any(a.screen_collision() for a in self)
+
+
+	def collision(self, obj) :
+		return any(a.collision(obj) for a in self)

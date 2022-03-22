@@ -25,21 +25,24 @@ class Game :
 
 		self.explosions = []
 
-		self.leftKey  = False
-		self.rightKey = False
-		self.fireKey = False
+		# relevent keys beeing held down
+		self.keys = {
+			'left': False, 
+			'right' : False, 
+			'fire' : False
+		}
 
-		self.done = False # flag the parent object that it can delete/reset the game object
+
+		self.done = False # past the game over screen
 		self.game_over = False
 		self.game_over_text = None
 		self.replay_text = None
 
-
-
+		# unbind on destroy
 		self.canvas.bind("<KeyPress>", self.key_down)
 		self.canvas.bind("<KeyRelease>", self.key_up)
-	
-
+		
+		# gray line at the bottom
 		self.finish_line_gfx = self.canvas.create_line(
 			0, 
 			self.finish_line,
@@ -49,19 +52,20 @@ class Game :
 			width=5
 		)
 
+		# set empty at the start
 		self.score_text = self.canvas.create_text(
 			self.canvas.get_width() - 10,
 			10, 
 			anchor=tk.NE,
-			text='', 
+			text="", 
 			fill="white", 
 			font=('Mono 20 bold italic')
 		)
 
+		# placeholder name
 		self.player_name = "PLAYER1"
 		self.current_score = 0
-		self.scores = {}
-		self.loadScore()
+		self.load_scores()
 
 		# init score graphics
 		self.addScore(0)
@@ -81,46 +85,50 @@ class Game :
 
 		self.canvas.unbind("<KeyPress>")
 		self.canvas.unbind("<KeyRelease>")
+
 		
+	def is_done(self) :
+		return self.done
 
 	def update(self, dt) :
 
-		# nothing to do on the game over screen
+		# nothing to do on the game over screen 
 		if self.game_over :
 			return
 
 		# update defender and fleet
-		self.player.update(dt, self.leftKey, self.rightKey, self.fireKey)
+		self.player.update(dt, self.keys)
 		self.fleet.update(dt)
 
 
 		# update explosions
 		for e in self.explosions :
-			e.update(dt)
-
-			if not e.isAlive() :
+			
+			if not e.is_alive() :
 				self.explosions.remove(e)
+			else :
+				e.update(dt)
 
 
 		# check if player bullets hit aliens
 		collisions = [(a, b)
-			for a in self.fleet.aliens
+			for a in self.fleet
 			for b in self.player.bullets
 			if a.collision(b)
 		]
 
+		# use sets so one thing isn't
+		# removed multiple times
+
 		# handle bullets
-		for b in set(b for _, b in collisions) :
-			b.destroy()
-			self.player.bullets.remove(b)
+		for b in {b for _, b in collisions} :
+			self.player.remove_bullet(b)
 
 		# handle aliens
-		for a in set(a for a, _ in collisions) :
-			a.destroy()
-			self.fleet.aliens.remove(a)
-
-			self.addScore(a.point_value)
+		for a in {a for a, _ in collisions} :
+			self.addScore(a.get_value())
 			self.boom(a.get_x(), a.get_y())
+			self.fleet.remove(a)
 			
 
 		# check if an alien bullet hits the player
@@ -132,22 +140,22 @@ class Game :
 		for b in collisions :
 			self.boom(self.player.get_x(), self.player.get_y())
 			self.player.hit()
-			b.destroy()
-			self.fleet.bullets.remove(b)
+			self.fleet.remove_bullet(b)
 
 
-		# check if an alien has reach the finish line
-		if any(a.y + a.height >= self.finish_line for a in self.fleet.aliens) :
+		# check if one or more alien has reach the finish line
+		if any(a.y + a.height >= self.finish_line 
+			for a in self.fleet) :
 			self.do_game_over()
 
 
 		# check if the player is dead
-		elif not self.player.isAlive() :
+		elif not self.player.is_alive() :
 			self.do_game_over()
 
 
 		# check if all the aliens are dead
-		elif not self.fleet.aliens :
+		elif len(self.fleet) == 0 :
 			self.addScore(10000)
 			self.do_game_over(win=True)
 
@@ -193,7 +201,8 @@ class Game :
 			font=('Arial 24 bold')
 		)
 
-		self.saveScore()
+		self.save_scores()
+
 
 
 	def addScore(self, n) :
@@ -215,22 +224,20 @@ class Game :
 		)
 
 
-	def loadScore(self, fname="scores") :
-
+	def load_scores(self, fname="scores") :
 		try :
 			with open(fname, 'r') as fp :
 				self.scores = eval(fp.read())
 
 		except FileNotFoundError :
-			# ignore the procedure if the file doesn't exist
-			pass
+			self.scores = {}
+
+		finally :
+			if self.player_name not in self.scores :
+				self.scores[self.player_name] = self.current_score
 
 
-		if self.player_name not in self.scores :
-			self.scores[self.player_name] = self.current_score
-
-
-	def saveScore(self, fname="scores") :
+	def save_scores(self, fname="scores") :
 		with open(fname, 'w') as fp :
 			fp.write(str(self.scores))
 
@@ -238,27 +245,26 @@ class Game :
 	def key_down(self, e) :
 		
 		if e.keysym == "space" :
-			self.fireKey = True
+			self.keys['fire'] = True
 
-			# replay/exit
+			# replay/exit on key down and not on key held
 			if self.game_over :
 				self.done = True
 
-
 		elif e.keysym == "Left" :
-			self.leftKey = True
+			self.keys['left'] = True
 			
 		elif e.keysym == "Right" :
-			self.rightKey = True
+			self.keys['right'] = True
 			
 
 	def key_up(self, e) :
 
 		if e.keysym == "space" :
-			self.fireKey = False
+			self.keys['fire'] = False
 
 		elif e.keysym == "Left" :
-			self.leftKey = False
+			self.keys['left'] = False
 			
 		elif e.keysym == "Right" :
-			self.rightKey = False
+			self.keys['right'] = False

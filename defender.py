@@ -52,22 +52,24 @@ class Defender(GameObject) :
 
 		self.canvas.delete(self.reload_bar)
 
-		
+	
+	def remove_bullet(self, b) :
+		b.destroy()
+		self.bullets.remove(b)		
 
-	def update(self, dt, Lkey, Rkey, Fkey) :
+	def update(self, dt, keys) :
 
-		if Lkey and self.x > 0 :
+		if keys['left'] and self.x > 0 :
 			self.x -= self.vx * dt
 
-		if Rkey and self.x + self.width < self.canvas.get_width() :
+		if keys['right'] and self.x + self.width < self.canvas.get_width() :
 			self.x += self.vx * dt
 
 		# handle shooting
 		self.timer -= dt
-		if Fkey and self.timer <= 0 :
+		if keys['fire'] and self.timer <= 0 :
 			self.timer = self.interval
-			b = Bullet(self.canvas, self.x+32, self.y, -350)
-			self.bullets.append(b)
+			self.fire()
 
 
 		# update reload bar
@@ -88,11 +90,22 @@ class Defender(GameObject) :
 			b.update(dt)
 
 			if b.screen_collision() :
-				b.destroy()
-				self.bullets.remove(b)
+				self.remove_bullet(b)
 
 		self.update_sprite()
 
+
+
+	def fire(self) :
+		
+		x = self.get_x() + self.get_width() / 2
+		y = self.get_y() - self.get_height()
+		vy = -350 # go up
+		
+		self.bullets.append(
+			Bullet(self.canvas, x, y, vy, dosfx=False)
+		)
+ 
 
 	def hit(self) :
 

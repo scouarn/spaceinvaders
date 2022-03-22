@@ -17,17 +17,15 @@ class SpaceInvaders :
 		self.canvas.bind('<Escape>',  lambda ev : self.stop())
 		self.canvas.bind('<Destroy>', lambda ev : self.stop())
 
-		self.frameRate = 60
 		self.running = False
 		self.game = Game(self.canvas)
 
 
 	def stop(self) :
-		# join with the game loop
 		self.running = False
 
 
-	def frame(self) :
+	def frame_event(self) :
 
 		# compute elapsed time
 		now = time.time()
@@ -37,12 +35,13 @@ class SpaceInvaders :
 		self.game.update(dt)
 
 		# restart on game over
-		if self.game.done :
+		if self.game.is_done() :
 			self.game.destroy()
 			self.game = Game(self.canvas)
 
 		if self.running :
-			self.canvas.tkcanvas.after(1000 // self.frameRate, self.frame)
+			# max 60 fps
+			self.canvas.after(1000 // 60, self.frame_event)
 
 		else :
 			self.canvas.destroy()
@@ -51,6 +50,6 @@ class SpaceInvaders :
 
 		self.lastTime = time.time()
 		self.running = True
-		self.canvas.tkcanvas.after(0, self.frame)
+		self.canvas.after(0, self.frame_event)
 		self.canvas.mainloop()
 		
