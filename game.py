@@ -15,33 +15,12 @@ class Game :
 		self.canvas = canvas
 
 		self.fleet = Fleet(self.canvas)
-		self.finish_line = self.canvas.get_height() * 0.8
-
 		self.player = Defender(self.canvas)
-		self.player.set_pos(
-			self.canvas.get_width() / 2, 
-			(self.finish_line + self.canvas.get_height() - Defender.image.height()) / 2)
-
-
+		self.finish_line = self.canvas.get_height() * 0.8
 		self.explosions = []
 
-		# relevent keys beeing held down
-		self.keys = {
-			'left': False, 
-			'right' : False, 
-			'fire' : False
-		}
-
-
 		self.done = False # past the game over screen
-		self.game_over = False
-		self.game_over_text = None
-		self.replay_text = None
 
-		# unbind on destroy
-		self.canvas.bind("<KeyPress>", self.key_down)
-		self.canvas.bind("<KeyRelease>", self.key_up)
-		
 		# gray line at the bottom
 		self.finish_line_gfx = self.canvas.create_line(
 			0, 
@@ -57,18 +36,19 @@ class Game :
 			self.canvas.get_width() - 10,
 			10, 
 			anchor=tk.NE,
-			text="", 
 			fill="white", 
-			font=('Mono 20 bold italic')
+			font=('Arial 20 bold italic')
 		)
 
+
 		# placeholder name
-		self.player_name = "PLAYER1"
 		self.current_score = 0
 		self.load_scores()
 
 		# init score graphics
-		self.addScore(0)
+		self.add_score(0)
+
+		self.state_function = self.state_game
 
 
 	def destroy(self) :
@@ -76,28 +56,33 @@ class Game :
 		self.player.destroy()
 
 		self.canvas.delete(self.finish_line_gfx)
-		self.canvas.delete(self.game_over_text)
-		self.canvas.delete(self.replay_text)
 		self.canvas.delete(self.score_text)
 
 		for e in self.explosions :
 			e.destroy()
 
-		self.canvas.unbind("<KeyPress>")
-		self.canvas.unbind("<KeyRelease>")
 
-		
+	def set_done(self) :
+		self.done = True
+
 	def is_done(self) :
 		return self.done
 
-	def update(self, dt) :
 
-		# nothing to do on the game over screen 
-		if self.game_over :
-			return
+	def update(self, dt) :
+		self.state_function(dt)
+
+
+
+	def transition_game(self) :
+		self.state_function = self.state_game
+		print(e.get())
+
+
+	def state_game(self, dt) :
 
 		# update defender and fleet
-		self.player.update(dt, self.keys)
+		self.player.update(dt)
 		self.fleet.update(dt)
 
 
@@ -126,7 +111,7 @@ class Game :
 
 		# handle aliens
 		for a in {a for a, _ in collisions} :
-			self.addScore(a.get_value())
+			self.add_score(a.get_value())
 			self.boom(a.get_x(), a.get_y())
 			self.fleet.remove(a)
 			
@@ -146,18 +131,18 @@ class Game :
 		# check if one or more alien has reach the finish line
 		if any(a.y + a.height >= self.finish_line 
 			for a in self.fleet) :
-			self.do_game_over()
+			self.transition_game_over()
 
 
 		# check if the player is dead
 		elif not self.player.is_alive() :
-			self.do_game_over()
+			self.transition_game_over()
 
 
 		# check if all the aliens are dead
 		elif len(self.fleet) == 0 :
-			self.addScore(10000)
-			self.do_game_over(win=True)
+			self.add_score(10000)
+			self.transition_game_over(win=True)
 
 
 
@@ -169,9 +154,14 @@ class Game :
 		self.canvas.lower(e.sprite)
 
 
-	def do_game_over(self, win=False) :
-		self.game_over = True
 
+	def transition_game_over(self, win=False) :
+
+		self.state_function = self.state_game_over
+		self.fleet.destroy() # remove clutter
+
+
+		# use correct text and sound
 		if win : 
 			text = "YOU WIN !"
 			sound = Game.sound_win
@@ -180,47 +170,104 @@ class Game :
 			text = "GAME OVER !"
 			sound = Game.sound_lose
 
+		# play sound
 		self.canvas.stop_all()
 		self.canvas.play_wav(sound)
 
-
-		self.game_over_text = self.canvas.create_text(
+		# display text
+		game_over_text = self.canvas.create_text(
 			self.canvas.get_width()/2,
-			self.canvas.get_height()/2, 
+			50, 
 			text=text, 
 			fill="white", 
 			font=('Arial 32 bold')
 		)
 
-		self.replay_text = self.canvas.create_text(
-			self.canvas.get_width()/2,
-			self.canvas.get_height() * 0.75, 
 
-			text="Press space to replay.", 
+
+		highscores_text = self.canvas.create_text(
+			self.canvas.get_width()/2,
+			100,
 			fill="white", 
-			font=('Arial 24 bold')
+			font=('Arial 15'),
+			justify="right",
+			anchor=tk.N
 		)
 
-		self.save_scores()
+
+
+		def update_highscores() :
+
+			values = list(self.scores.items())[:10]
+			values.sort(key=lambda kv : kv[1], reverse=True)
+
+			lines = [f"{k} : {v:06d}" for k, v in values]
+			text = "\n".join(lines)
+
+			self.canvas.itemconfig(
+				highscores_text,
+				text=text)
+
+
+		# init table
+		update_highscores()
+
+
+		def on_save() :
+			name = name_entry.get()
+			self.save_scores(name)
+			update_highscores()
+
+			save_button["state"] = "disabled"
+			name_entry["state"] = "disabled"
+			
+
+
+		# !! widget.destroy() destroys the root window !!
+		def on_replay() :
+			name_entry.place_forget()
+			save_button.place_forget()
+			replay_button.place_forget()
+			self.canvas.delete(game_over_text)
+			self.canvas.delete(highscores_text)
+
+			self.set_done()
+
+
+		name_entry = tk.Entry(self.canvas.tkcanvas)
+		name_entry.insert(0, "your name")
+		
+		save_button = tk.Button(self.canvas.tkcanvas, text="SAVE SCORE", 
+			command=on_save)
+
+		replay_button = tk.Button(self.canvas.tkcanvas, text="PLAY AGAIN", 
+			command=on_replay)
+
+		x = self.canvas.get_width() / 2
+		y = self.canvas.get_height() * 0.60
+		w = 100
+		h = 25
+		a = tk.CENTER
+
+		name_entry.place(   x=x, y=y,    width=w, height=h, anchor=a)
+		save_button.place(  x=x, y=y+30, width=w, height=h, anchor=a)
+		replay_button.place(x=x, y=y+60, width=w, height=h, anchor=a)
 
 
 
-	def addScore(self, n) :
+
+
+	def state_game_over(self, dt) :
+		pass
+
+
+
+	def add_score(self, n) :
 		self.current_score += n
-
-		# uninitialized scores
-		assert(self.player_name in self.scores)
-
-
-		best_score = self.scores[self.player_name]
-
-		if best_score < self.current_score :
-			best_score = self.current_score
-			self.scores[self.player_name] = self.current_score
 
 		self.canvas.itemconfig(
 			self.score_text, 
-			text=f"score: {self.current_score:06d}\nbest : {best_score:06d}"
+			text=f"score: {self.current_score:06d}"
 		)
 
 
@@ -229,42 +276,19 @@ class Game :
 			with open(fname, 'r') as fp :
 				self.scores = eval(fp.read())
 
-		except FileNotFoundError :
+		except (FileNotFoundError, SyntaxError) :
 			self.scores = {}
 
-		finally :
-			if self.player_name not in self.scores :
-				self.scores[self.player_name] = self.current_score
 
+	def save_scores(self, player="player", fname="scores") :
 
-	def save_scores(self, fname="scores") :
+		# compare current score to the highscores
+		if player in self.scores :
+			self.current_score = max(self.scores[player], self.current_score)		
+
+		self.scores[player] = self.current_score
+
 		with open(fname, 'w') as fp :
 			fp.write(str(self.scores))
 
 
-	def key_down(self, e) :
-		
-		if e.keysym == "space" :
-			self.keys['fire'] = True
-
-			# replay/exit on key down and not on key held
-			if self.game_over :
-				self.done = True
-
-		elif e.keysym == "Left" :
-			self.keys['left'] = True
-			
-		elif e.keysym == "Right" :
-			self.keys['right'] = True
-			
-
-	def key_up(self, e) :
-
-		if e.keysym == "space" :
-			self.keys['fire'] = False
-
-		elif e.keysym == "Left" :
-			self.keys['left'] = False
-			
-		elif e.keysym == "Right" :
-			self.keys['right'] = False

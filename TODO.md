@@ -1,8 +1,16 @@
-defender capable de tirer 10pts
-flotte : 12pts 
-collision bullet-alien : 14pts
-améliorations :  0-4pts
+defender capable de tirer 10pts   : OK 
+flotte : 12pts   :  OK
+collision bullet-alien : 14pts    : OK
+améliorations :  0-4pts  : audio, tir, classe bonus, bar chargement, score
 rapport -> paragraphe sur l'IA wtf ??? : 2pts
+
+
+```
+On ne peut pas vraiment parler d'IA dans le cas de mon implémentation, en effet les aliens ne sont pas programmés pour répondre aux stimuli extérieurs : joueur, aliens voisins, ...
+
+
+
+```
 
 
 # IMPROVEMENTS :

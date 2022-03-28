@@ -9,6 +9,7 @@ class Alien(GameObject) :
 	def __init__(self, canvas, x=0, y=0, vx=0, type=0) :
 		self.type = type # integer : not the built in type function
 
+		# load images on first instanciation
 		if Alien.images is None :
 			Alien.images = [
 				tk.PhotoImage(file="assets/alien4.png"),

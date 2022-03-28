@@ -14,7 +14,10 @@ class Defender(GameObject) :
 		if Defender.image is None :
 			Defender.image = tk.PhotoImage(file="assets/def1.png")
 
-		super().__init__(canvas, image=Defender.image)
+		x = canvas.get_width() / 2
+		y = (canvas.get_height() - Defender.image.height() * 1.5)
+
+		super().__init__(canvas, x=x, y=y, image=Defender.image)
 
 
 		self.vx = 200
@@ -39,6 +42,16 @@ class Defender(GameObject) :
 		self.interval = 1.0
 		self.timer = 0.0
 
+		# will be unbound on destroy
+		self.canvas.bind("<KeyPress>", self.key_down)
+		self.canvas.bind("<KeyRelease>", self.key_up)
+
+		self.keys = {
+			'left'  : False, 
+			'right' : False, 
+			'fire'  : False
+		} 
+
 
 
 	def destroy(self) :
@@ -51,23 +64,25 @@ class Defender(GameObject) :
 			b.destroy()
 
 		self.canvas.delete(self.reload_bar)
+		self.canvas.unbind("<KeyPress>")
+		self.canvas.unbind("<KeyRelease>")
 
 	
 	def remove_bullet(self, b) :
 		b.destroy()
 		self.bullets.remove(b)		
 
-	def update(self, dt, keys) :
+	def update(self, dt) :
 
-		if keys['left'] and self.x > 0 :
+		if self.keys['left'] and self.x > 0 :
 			self.x -= self.vx * dt
 
-		if keys['right'] and self.x + self.width < self.canvas.get_width() :
+		if self.keys['right'] and self.x + self.width < self.canvas.get_width() :
 			self.x += self.vx * dt
 
 		# handle shooting
 		self.timer -= dt
-		if keys['fire'] and self.timer <= 0 :
+		if self.keys['fire'] and self.timer <= 0 :
 			self.timer = self.interval
 			self.fire()
 
@@ -103,7 +118,7 @@ class Defender(GameObject) :
 		vy = -350 # go up
 		
 		self.bullets.append(
-			Bullet(self.canvas, x, y, vy, dosfx=False)
+			Bullet(self.canvas, x, y, vy, dosfx=True)
 		)
  
 
@@ -116,3 +131,27 @@ class Defender(GameObject) :
 		else :
 			self.alive = False
 
+
+
+	def key_down(self, e) :
+		
+		if e.keysym == "space" :
+			self.keys['fire'] = True
+
+		elif e.keysym == "Left" :
+			self.keys['left'] = True
+			
+		elif e.keysym == "Right" :
+			self.keys['right'] = True
+			
+
+	def key_up(self, e) :
+
+		if e.keysym == "space" :
+			self.keys['fire'] = False
+
+		elif e.keysym == "Left" :
+			self.keys['left'] = False
+			
+		elif e.keysym == "Right" :
+			self.keys['right'] = False
