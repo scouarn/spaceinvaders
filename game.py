@@ -214,7 +214,7 @@ class Game :
 
 
 		def on_save() :
-			name = name_entry.get()
+			name = name_entry.get().upper()
 			self.save_scores(name)
 			update_highscores()
 
@@ -280,7 +280,7 @@ class Game :
 			self.scores = {}
 
 
-	def save_scores(self, player="player", fname="scores") :
+	def save_scores(self, player="PLAYER", fname="scores") :
 
 		# compare current score to the highscores
 		if player in self.scores :
