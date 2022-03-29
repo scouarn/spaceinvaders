@@ -204,17 +204,23 @@ class Game :
 
 
 		def on_save() :
-			# get player name from the textbox
-			player = name_entry.get().upper()
+			
+			# get the player name
+			name = re.escape(      # prevent injection of code
+				name_entry.get()   # get text from textbox
+				[:10]              # limit size
+				.upper()           # all caps
+				.replace(" ", "_") # remove spaces
+			)
 			
 			# compare current score to the highscores
-			if player in scores :
-				scores[player] = max(scores[player], self.current_score)		
+			if name in scores :
+				scores[name] = max(scores[name], self.current_score)		
 
 			else :
-				scores[player] = self.current_score
+				scores[name] = self.current_score
 
-			self.save_scores(scores, player)
+			self.save_scores(scores, name)
 			update_highscores()
 
 			# prevent user from entering same score twice
@@ -286,9 +292,15 @@ class Game :
 			with open(Game.scores_file_name, 'r') as fp :
 				scores = eval(fp.read())
 
+				# check if it
+				assert all(
+					isinstance(k, str) and isinstance(v, int)
+					for k, v in scores.items()
+				)
+
 		# ignore if the file hasn't been created yet,
 		# or if it's corrupted (python couldn't parse it)
-		except (FileNotFoundError, SyntaxError) :
+		except (FileNotFoundError, SyntaxError, AssertionError) :
 			scores = {}
 
 		finally :
