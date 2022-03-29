@@ -8,6 +8,8 @@ import re
 
 class Game :
 
+	scores_file_name = "scores"
+
 	sound_lose = "assets/lose.wav"
 	sound_win  = "assets/win.wav"
 
@@ -16,10 +18,13 @@ class Game :
 
 		self.fleet = Fleet(self.canvas)
 		self.player = Defender(self.canvas)
-		self.finish_line = self.canvas.get_height() * 0.8
 		self.explosions = []
 
-		self.done = False # past the game over screen
+		self.done = False 
+		self.state_function = self.state_game
+
+		# game over if an alien goes under this height
+		self.finish_line = self.canvas.get_height() * 0.8
 
 		# gray line at the bottom
 		self.finish_line_gfx = self.canvas.create_line(
@@ -41,14 +46,9 @@ class Game :
 		)
 
 
-		# placeholder name
 		self.current_score = 0
-		self.load_scores()
+		self.add_score(0) # init score graphics
 
-		# init score graphics
-		self.add_score(0)
-
-		self.state_function = self.state_game
 
 
 	def destroy(self) :
@@ -62,21 +62,12 @@ class Game :
 			e.destroy()
 
 
-	def set_done(self) :
-		self.done = True
-
 	def is_done(self) :
 		return self.done
 
 
 	def update(self, dt) :
 		self.state_function(dt)
-
-
-
-	def transition_game(self) :
-		self.state_function = self.state_game
-		print(e.get())
 
 
 	def state_game(self, dt) :
@@ -96,14 +87,15 @@ class Game :
 
 
 		# check if player bullets hit aliens
+		# many to many
 		collisions = [(a, b)
 			for a in self.fleet
 			for b in self.player.bullets
 			if a.collision(b)
 		]
 
-		# use sets so one thing isn't
-		# removed multiple times
+		# use sets and not lists so everything is
+		# handled once
 
 		# handle bullets
 		for b in {b for _, b in collisions} :
@@ -114,9 +106,10 @@ class Game :
 			self.add_score(a.get_value())
 			self.boom(a.get_x(), a.get_y())
 			self.fleet.remove(a)
-			
+
 
 		# check if an alien bullet hits the player
+		# many to one
 		collisions = [b 
 			for b in self.fleet.bullets
 			if self.player.collision(b)
@@ -161,7 +154,7 @@ class Game :
 		self.fleet.destroy() # remove clutter
 
 
-		# use correct text and sound
+		# choose the correct text and sound
 		if win : 
 			text = "YOU WIN !"
 			sound = Game.sound_win
@@ -184,7 +177,7 @@ class Game :
 		)
 
 
-
+		# score table
 		highscores_text = self.canvas.create_text(
 			self.canvas.get_width()/2,
 			100,
@@ -192,13 +185,14 @@ class Game :
 			font=('Arial 15'),
 			justify="right",
 			anchor=tk.N
+			# empty content, filled on the first "update" call
 		)
 
 
+		scores = self.load_scores()
 
 		def update_highscores() :
-
-			values = list(self.scores.items())[:10]
+			values = list(scores.items())[:10]
 			values.sort(key=lambda kv : kv[1], reverse=True)
 
 			lines = [f"{k} : {v:06d}" for k, v in values]
@@ -209,31 +203,46 @@ class Game :
 				text=text)
 
 
-		# init table
-		update_highscores()
-
-
 		def on_save() :
-			name = name_entry.get().upper()
-			self.save_scores(name)
+			# get player name from the textbox
+			player = name_entry.get().upper()
+			
+			# compare current score to the highscores
+			if player in scores :
+				scores[player] = max(scores[player], self.current_score)		
+
+			else :
+				scores[player] = self.current_score
+
+			self.save_scores(scores, player)
 			update_highscores()
 
+			# prevent user from entering same score twice
 			save_button["state"] = "disabled"
 			name_entry["state"] = "disabled"
 			
 
-
-		# !! widget.destroy() destroys the root window !!
 		def on_replay() :
 			name_entry.place_forget()
 			save_button.place_forget()
 			replay_button.place_forget()
+
+			# !! widget.destroy() destroys the root window !!
+			# name_entry.destroy()
+			# save_button.destroy()
+			# replay_button.destroy()
+
 			self.canvas.delete(game_over_text)
 			self.canvas.delete(highscores_text)
 
-			self.set_done()
+			self.done = True
 
 
+		# init table
+		update_highscores()
+
+
+		# show menu
 		name_entry = tk.Entry(self.canvas.tkcanvas)
 		name_entry.insert(0, "your name")
 		
@@ -256,8 +265,8 @@ class Game :
 
 
 
-
 	def state_game_over(self, dt) :
+		# nothing to do on game over
 		pass
 
 
@@ -265,30 +274,33 @@ class Game :
 	def add_score(self, n) :
 		self.current_score += n
 
+		# also update the text
 		self.canvas.itemconfig(
 			self.score_text, 
 			text=f"score: {self.current_score:06d}"
 		)
 
 
-	def load_scores(self, fname="scores") :
+	def load_scores(self) :
 		try :
-			with open(fname, 'r') as fp :
-				self.scores = eval(fp.read())
+			with open(Game.scores_file_name, 'r') as fp :
+				scores = eval(fp.read())
 
+		# ignore if the file hasn't been created yet,
+		# or if it's corrupted (python couldn't parse it)
 		except (FileNotFoundError, SyntaxError) :
-			self.scores = {}
+			scores = {}
+
+		finally :
+			return scores
 
 
-	def save_scores(self, player="PLAYER", fname="scores") :
+	def save_scores(self, scores, player="PLAYER") :
 
-		# compare current score to the highscores
-		if player in self.scores :
-			self.current_score = max(self.scores[player], self.current_score)		
+		# the scores are stored in python dictionary string format
+		scores_str = str(scores)  
 
-		self.scores[player] = self.current_score
-
-		with open(fname, 'w') as fp :
-			fp.write(str(self.scores))
+		with open(Game.scores_file_name, "w") as fp :
+			fp.write(scores_str)
 
 

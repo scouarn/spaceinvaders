@@ -15,7 +15,7 @@ class Explosion(GameObject) :
 		"assets/explosion5.wav",
 	]
 
-	def __init__(self, canvas, x, y, timer=1.0) :
+	def __init__(self, canvas, x, y, dosfx=True, timer=1.0) :
 
 		if Explosion.image is None :
 			Explosion.image = tk.PhotoImage(file="assets/explo1.png")
@@ -24,7 +24,8 @@ class Explosion(GameObject) :
 
 		self.timer = timer
 
-		self.canvas.play_wav(random.choice(Explosion.sounds))
+		if dosfx :
+			self.canvas.play_wav(random.choice(Explosion.sounds))
 
 
 	def update(self, dt) :

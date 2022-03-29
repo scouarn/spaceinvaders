@@ -40,11 +40,12 @@ class SpaceInvaders :
 			self.game = Game(self.canvas)
 
 		if self.running :
-			# max 60 fps
+			# max at 60 fps
 			self.canvas.after(1000 // 60, self.frame_event)
 
 		else :
 			self.canvas.destroy()
+
 
 	def start(self) :
 

@@ -14,12 +14,11 @@ class Fleet(GameObject) :
 
 		self.vx = 100
 		self.vy = 16
-		self.acc = 1.1
+		self.acc = 1.1 
 		
 		self.rows = 4
 		self.cols = 6
 		self.spacing = 70
-
 
 		self.bullets = []
 		self.interval = 0.5
@@ -61,7 +60,7 @@ class Fleet(GameObject) :
 
 		for b in self.bullets :
 			b.destroy()
-			
+
 
 
 	def update(self, dt) :
@@ -79,7 +78,6 @@ class Fleet(GameObject) :
 			b.update(dt)
 		
 
-
 		# speed up and reverse direction
 		if self.screen_collision() :
 
@@ -92,6 +90,7 @@ class Fleet(GameObject) :
 
 	def fire(self) :
 
+		# choose a random alien as firing position
 		a = random.choice(self.aliens)
 
 		x = a.get_x() + a.get_width() / 2
@@ -105,7 +104,6 @@ class Fleet(GameObject) :
 
 	def screen_collision(self) :
 		return any(a.screen_collision() for a in self)
-
 
 	def collision(self, obj) :
 		return any(a.collision(obj) for a in self)

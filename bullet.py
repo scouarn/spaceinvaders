@@ -21,6 +21,6 @@ class Bullet(GameObject) :
 		super().__init__(canvas, x=x, y=y, image=Bullet.image)
 
 		self.vy = vy
-
+		
 		if dosfx :
 			self.canvas.play_wav(random.choice(Bullet.sounds))

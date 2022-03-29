@@ -3,7 +3,6 @@ os = platform.system()
 
 
 if os == "Windows" :
-
 	import winsound
 
 	print("Warning : windows audio implementation not tested !")
@@ -47,5 +46,3 @@ else :
 
 	def stop_all() :
 		pass
-
-

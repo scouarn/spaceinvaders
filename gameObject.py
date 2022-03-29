@@ -23,7 +23,7 @@ class GameObject :
 
 		self.sprite = self.canvas.create_image(
 			self.x, self.y,
-			image=image, 
+			image=image, # okay if None
 			anchor=tk.NW # top left
 		)
 
@@ -33,14 +33,18 @@ class GameObject :
 		if self.sprite is not None :
 			self.canvas.moveto(self.sprite, int(self.x), int(self.y))
 
+			# cycling animation frames would be done here
+
 
 	def destroy(self) :
 		self.canvas.delete(self.sprite)
 		self.sprite = None
 
+
 	def update(self, dt) :
-		
-		# movement
+		# default update function that move 
+		# the object based on its velocity
+
 		self.x += self.vx * dt
 		self.y += self.vy * dt
 

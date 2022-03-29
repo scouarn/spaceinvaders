@@ -21,10 +21,11 @@ class Alien(GameObject) :
 
 		super().__init__(
 			canvas, 
-			x=x, y=y, vx=vx,
+			x=x, y=y, vx=vx,   # use the right sprite
 			image=Alien.images[self.type % len(Alien.images)
 		])
 
 
 	def get_value(self) :
-		return 100 * (self.type+1)
+		# somewhat arbitrary formula
+		return 100 * (self.type+1) 
