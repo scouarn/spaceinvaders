@@ -2,21 +2,21 @@ import platform
 os = platform.system() 
 
 
-if os == "Windows" :
-	import winsound
+# if os == "Windows" :
+# 	import winsound
 
-	print("Warning : windows audio implementation not tested !")
+# 	print("Warning : windows audio implementation not tested !")
 
-	def play_wav(fname) :
-		winsound.Playsound(fname, 
-			winsound.SND_FILENAME | winsound.SND_ASYNC | winsound.SND_NOSTOP
-		)
+# 	def play_wav(fname) :
+# 		winsound.Playsound(fname, 
+# 			winsound.SND_FILENAME | winsound.SND_ASYNC | winsound.SND_NOSTOP
+# 		)
 
-	def stop_all() :
-		winsound.PlaySound(None, winsound.SND_PURGE)
+# 	def stop_all() :
+# 		winsound.PlaySound(None, winsound.SND_PURGE)
 
 
-elif os == "Linux" :
+if os == "Linux" :
 	import subprocess
 
 	processes = []
@@ -39,7 +39,7 @@ elif os == "Linux" :
 
 
 else :
-	print("Warning : audio not implemented for this platform.")
+	print("Warning : audio not supported on this platform.")
 
 	def play_wav(fname) :
 		pass
