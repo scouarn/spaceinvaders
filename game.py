@@ -4,6 +4,7 @@ from explosion import Explosion
 
 import tkinter as tk
 import re
+import csv
 
 
 class Game :
@@ -205,12 +206,10 @@ class Game :
 
 		def on_save() :
 			
-			# get the player name
-			name = re.escape(      # prevent injection of code
-				name_entry.get()   # get text from textbox
-				[:10]              # limit size
-				.upper()           # all caps
-				.replace(" ", "_") # remove spaces
+			# get the player name from textbox
+			name = re.escape(         # prevent injection of code
+				name_entry.get()[:10] # limit size
+				.replace(" ", "_")
 			)
 			
 			# compare current score to the highscores
@@ -289,18 +288,20 @@ class Game :
 
 	def load_scores(self) :
 		try :
+			scores = {}
+
+			# load csv
 			with open(Game.scores_file_name, 'r') as fp :
-				scores = eval(fp.read())
+				reader = csv.DictReader(fp)
 
-				# check if there's only strings and ints
-				assert all(
-					isinstance(k, str) and isinstance(v, int)
-					for k, v in scores.items()
-				)
+				for row in reader :
+					player = row["player"]
+					score  = row["score"]
 
-		# ignore if the file hasn't been created yet,
-		# or if it's corrupted (python couldn't parse it)
-		except (FileNotFoundError, SyntaxError, AssertionError) :
+					scores[player] = int(score)
+
+		# ignore if the file hasn't been created yet
+		except (FileNotFoundError) :
 			scores = {}
 
 		finally :
@@ -309,10 +310,14 @@ class Game :
 
 	def save_scores(self, scores, player="PLAYER") :
 
-		# the scores are stored in python dictionary string format
-		scores_str = str(scores)  
-
+		# store csv
 		with open(Game.scores_file_name, "w") as fp :
-			fp.write(scores_str)
 
+			fields = "player", "score"
+			writer = csv.DictWriter(fp, fieldnames=fields)
+
+			writer.writeheader()
+			
+			for k,v in scores.items() :
+				writer.writerow({"player":k, "score": v})
 

@@ -39,7 +39,7 @@ if os == "Linux" :
 
 
 else :
-	print("Warning : audio not supported on this platform.")
+	# print("Warning : audio not supported on this platform.")
 
 	def play_wav(fname) :
 		pass

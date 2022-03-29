@@ -1,0 +1,11 @@
+Pour lancer le jeu, exécuter __main__.py.
+A priori imcompatible avec python2. 
+
+Mon module audio n'est fonctionnel que sous Linux, je ne voulais pas qu'il faille installer autre chose que tkinter. Lancer le jeu sous un autre os reste possible.
+
+Je suis l'auteur des images et des effets sonores.
+
+J'ai commenté le code en anglais.
+
+
+
