@@ -292,7 +292,7 @@ class Game :
 			with open(Game.scores_file_name, 'r') as fp :
 				scores = eval(fp.read())
 
-				# check if it
+				# check if there's only strings and ints
 				assert all(
 					isinstance(k, str) and isinstance(v, int)
 					for k, v in scores.items()
