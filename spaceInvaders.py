@@ -53,4 +53,4 @@ class SpaceInvaders :
 		self.running = True
 		self.canvas.after(0, self.frame_event)
 		self.canvas.mainloop()
-		
+

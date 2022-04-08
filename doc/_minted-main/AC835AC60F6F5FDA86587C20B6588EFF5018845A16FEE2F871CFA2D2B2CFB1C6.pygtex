@@ -1,0 +1,9 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{frame\PYGZus{}event}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{)} \PYG{p}{:}
+	\PYG{n}{now} \PYG{o}{=} \PYG{n}{time}\PYG{o}{.}\PYG{n}{time}\PYG{p}{()}
+	\PYG{n}{dt} \PYG{o}{=} \PYG{n}{now} \PYG{o}{\PYGZhy{}} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lastTime}
+	\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lastTime} \PYG{o}{=} \PYG{n}{now}
+
+	\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{game}\PYG{o}{.}\PYG{n}{update}\PYG{p}{(}\PYG{n}{dt}\PYG{p}{)}
+	\PYG{o}{...}
+\end{Verbatim}

@@ -1,0 +1,8 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{play\PYGZus{}wav}\PYG{p}{(}\PYG{n}{fname}\PYG{p}{)} \PYG{p}{:}
+	\PYG{n}{p} \PYG{o}{=} \PYG{n}{subprocess}\PYG{o}{.}\PYG{n}{Popen}\PYG{p}{(}
+		\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}ffplay\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}nodisp\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}autoexit\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}volume\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}75\PYGZsq{}}\PYG{p}{,} \PYG{n}{fname}\PYG{p}{],}
+		\PYG{n}{stdout}\PYG{o}{=}\PYG{n}{subprocess}\PYG{o}{.}\PYG{n}{DEVNULL}\PYG{p}{,} \PYG{n}{stderr}\PYG{o}{=}\PYG{n}{subprocess}\PYG{o}{.}\PYG{n}{DEVNULL}\PYG{p}{,}
+	\PYG{p}{)}
+	\PYG{n}{processes}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{p}\PYG{p}{)}
+\end{Verbatim}

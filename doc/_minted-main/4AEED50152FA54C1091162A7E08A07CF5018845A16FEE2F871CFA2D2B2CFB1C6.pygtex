@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{get\PYGZus{}value}\PYG{p}{(}\PYG{n}{alien}\PYG{p}{)} \PYG{p}{:}
+	\PYG{k}{return} \PYG{l+m+mi}{100} \PYG{o}{*} \PYG{p}{(}\PYG{n}{alien}\PYG{o}{.}\PYG{n}{type}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{p}{)}
+\end{Verbatim}

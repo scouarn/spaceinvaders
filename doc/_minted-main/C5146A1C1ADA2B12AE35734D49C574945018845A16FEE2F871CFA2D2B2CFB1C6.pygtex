@@ -1,0 +1,12 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{} Game.update()}
+\PYG{n}{collisions} \PYG{o}{=} \PYG{p}{[}\PYG{n}{b}
+	\PYG{k}{for} \PYG{n}{b} \PYG{o+ow}{in} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{fleet}\PYG{o}{.}\PYG{n}{bullets}
+	\PYG{k}{if} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{player}\PYG{o}{.}\PYG{n}{collision}\PYG{p}{(}\PYG{n}{b}\PYG{p}{)}
+\PYG{p}{]}
+
+\PYG{k}{for} \PYG{n}{b} \PYG{o+ow}{in} \PYG{n}{collisions} \PYG{p}{:}
+	\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{boom}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{player}\PYG{o}{.}\PYG{n}{get\PYGZus{}x}\PYG{p}{(),} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{player}\PYG{o}{.}\PYG{n}{get\PYGZus{}y}\PYG{p}{())}
+	\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{player}\PYG{o}{.}\PYG{n}{hit}\PYG{p}{()}
+	\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{fleet}\PYG{o}{.}\PYG{n}{remove\PYGZus{}bullet}\PYG{p}{(}\PYG{n}{b}\PYG{p}{)}
+\end{Verbatim}

@@ -1,6 +1,10 @@
 import tkinter as tk
 import audio
 
+# for screenshot utility
+from pyscreenshot import grab
+from PIL import Image
+import os
 
 
 class Canvas(tk.Tk) :
@@ -43,6 +47,7 @@ class Canvas(tk.Tk) :
 		self.play_wav = audio.play_wav
 		self.stop_all = audio.stop_all
 
+		self.bind("<Tab>", self.screenshot)
 
 	def destroy(self) :
 		self.stop_all()
@@ -53,3 +58,21 @@ class Canvas(tk.Tk) :
 
 	def get_height(self) :
 		return self.height
+
+
+	def screenshot(self, e) :
+
+
+		x = self.tkframe.winfo_rootx() + 2 # 2px border
+		y = self.tkframe.winfo_rooty() + 2 
+
+		i = 0
+		while os.path.exists(f"screenshot/{i}.png") :
+		    i += 1
+
+		im = grab(bbox=(x, y, x+self.width, y+self.height))
+		im.save(f"screenshot/{i}.png")
+		
+		print(f"{i}.png saved")
+		
+

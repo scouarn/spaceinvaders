@@ -1,0 +1,9 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{screen\PYGZus{}collision}\PYG{p}{(}\PYG{n}{obj}\PYG{p}{)} \PYG{p}{:}
+	\PYG{k}{return} \PYG{n+nb}{any}\PYG{p}{([}
+		\PYG{n}{obj}\PYG{o}{.}\PYG{n}{x} \PYG{o}{\PYGZlt{}} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{c+c1}{\PYGZsh{} left}
+		\PYG{n}{obj}\PYG{o}{.}\PYG{n}{y} \PYG{o}{\PYGZlt{}} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{c+c1}{\PYGZsh{} top}
+		\PYG{n}{obj}\PYG{o}{.}\PYG{n}{x} \PYG{o}{+} \PYG{n}{obj}\PYG{o}{.}\PYG{n}{width}  \PYG{o}{\PYGZgt{}=} \PYG{n}{obj}\PYG{o}{.}\PYG{n}{canvas}\PYG{o}{.}\PYG{n}{get\PYGZus{}width}\PYG{p}{(),} \PYG{c+c1}{\PYGZsh{} right}
+		\PYG{n}{obj}\PYG{o}{.}\PYG{n}{y} \PYG{o}{+} \PYG{n}{obj}\PYG{o}{.}\PYG{n}{height} \PYG{o}{\PYGZgt{}=} \PYG{n}{obj}\PYG{o}{.}\PYG{n}{canvas}\PYG{o}{.}\PYG{n}{get\PYGZus{}height}\PYG{p}{()} \PYG{c+c1}{\PYGZsh{} bottom}
+	\PYG{p}{])}
+\end{Verbatim}

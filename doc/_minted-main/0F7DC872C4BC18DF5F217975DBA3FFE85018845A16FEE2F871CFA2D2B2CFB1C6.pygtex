@@ -1,0 +1,5 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{stop\PYGZus{}all}\PYG{p}{()} \PYG{p}{:}
+	\PYG{k}{while} \PYG{n}{processes} \PYG{p}{:}
+		\PYG{n}{processes}\PYG{o}{.}\PYG{n}{pop}\PYG{p}{()}\PYG{o}{.}\PYG{n}{kill}\PYG{p}{()}
+\end{Verbatim}

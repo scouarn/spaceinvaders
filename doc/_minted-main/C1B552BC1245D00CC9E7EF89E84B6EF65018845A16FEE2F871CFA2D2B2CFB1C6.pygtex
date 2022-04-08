@@ -1,0 +1,13 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{width}\PYG{p}{,} \PYG{n}{height}\PYG{p}{,} \PYG{n}{title}\PYG{p}{)} \PYG{p}{:}
+	\PYG{n+nb}{super}\PYG{p}{()}\PYG{o}{.}\PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{()} \PYG{c+c1}{\PYGZsh{} tk.Tk}
+	
+	\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{n}{title}\PYG{p}{)}
+	\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{width}  \PYG{o}{=} \PYG{n}{width}
+	\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{height} \PYG{o}{=} \PYG{n}{height}
+		
+	\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{tkframe}  \PYG{o}{=} \PYG{n}{tk}\PYG{o}{.}\PYG{n}{Frame}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{)}
+	\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{tkcanvas} \PYG{o}{=} \PYG{n}{tk}\PYG{o}{.}\PYG{n}{Canvas}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{tkframe}\PYG{p}{,} \PYG{n}{width}\PYG{o}{=}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{width}\PYG{p}{,} \PYG{n}{height}\PYG{o}{=}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{height}\PYG{p}{,} \PYG{o}{...}\PYG{p}{)}
+	\PYG{o}{...}
+
+\end{Verbatim}

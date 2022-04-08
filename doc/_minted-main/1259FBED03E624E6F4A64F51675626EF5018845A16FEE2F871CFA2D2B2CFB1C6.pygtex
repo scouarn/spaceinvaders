@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{collision}\PYG{p}{(}\PYG{n}{o1}\PYG{p}{,} \PYG{n}{o2}\PYG{p}{)} \PYG{p}{:}
+	\PYG{o}{...}
+
+\PYG{k}{def} \PYG{n+nf}{screen\PYGZus{}collision}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{)} \PYG{p}{:}
+	\PYG{o}{...}
+\end{Verbatim}

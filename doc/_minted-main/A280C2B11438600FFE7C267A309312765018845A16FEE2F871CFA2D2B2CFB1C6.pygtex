@@ -1,0 +1,10 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf+fm}{\PYGZus{}\PYGZus{}iter\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{)} \PYG{p}{:}
+	\PYG{k}{return} \PYG{n+nb}{iter}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{aliens}\PYG{p}{)}
+
+\PYG{o}{...}
+
+\PYG{n}{fleet} \PYG{o}{=} \PYG{n}{Fleet}\PYG{p}{()}
+\PYG{k}{for} \PYG{n}{alien} \PYG{o+ow}{in} \PYG{n}{fleet} \PYG{p}{:}
+	\PYG{o}{...}
+\end{Verbatim}

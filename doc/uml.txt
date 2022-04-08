@@ -1,0 +1,16 @@
+
+
+[SpaceInvaders]1->[Game]
+[SpaceInvaders]1->[Canvas]
+
+[Canvas]-.-[note: Audio & Tkinter]
+
+
+[Game]1->[Fleet]
+[Game]1->[Defender]
+[Game]*++[Explosion]
+
+[Fleet]*++[Alien]
+[Fleet]*++[Bullet]
+
+[Defender]*++[Bullet]

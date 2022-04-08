@@ -1,0 +1,12 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{} Game.update()}
+\PYG{k}{if} \PYG{n+nb}{any}\PYG{p}{(}\PYG{n}{a}\PYG{o}{.}\PYG{n}{y} \PYG{o}{+} \PYG{n}{a}\PYG{o}{.}\PYG{n}{height} \PYG{o}{\PYGZgt{}=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{finish\PYGZus{}line} \PYG{k}{for} \PYG{n}{a} \PYG{o+ow}{in} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{fleet}\PYG{p}{)} \PYG{p}{:}
+	\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{transition\PYGZus{}game\PYGZus{}over}\PYG{p}{()}
+
+\PYG{k}{elif} \PYG{o+ow}{not} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{player}\PYG{o}{.}\PYG{n}{is\PYGZus{}alive}\PYG{p}{()} \PYG{p}{:}
+	\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{transition\PYGZus{}game\PYGZus{}over}\PYG{p}{()}
+
+\PYG{k}{elif} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{fleet}\PYG{p}{)} \PYG{o}{==} \PYG{l+m+mi}{0} \PYG{p}{:}
+	\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{add\PYGZus{}score}\PYG{p}{(}\PYG{l+m+mi}{10000}\PYG{p}{)}
+	\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{transition\PYGZus{}game\PYGZus{}over}\PYG{p}{(}\PYG{n}{win}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+\end{Verbatim}

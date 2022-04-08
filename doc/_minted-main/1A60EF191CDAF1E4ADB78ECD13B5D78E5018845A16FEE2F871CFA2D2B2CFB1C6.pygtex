@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{stop}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{)} \PYG{p}{:}
+	\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{running} \PYG{o}{=} \PYG{k+kc}{False}
+\end{Verbatim}

@@ -1,0 +1,9 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+	\PYG{o}{...}
+	\PYG{k}{if} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{running} \PYG{p}{:}
+		\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{canvas}\PYG{o}{.}\PYG{n}{after}\PYG{p}{(}\PYG{l+m+mi}{1000} \PYG{o}{//} \PYG{l+m+mi}{60}\PYG{p}{,} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{frame\PYGZus{}event}\PYG{p}{)}
+
+	\PYG{k}{else} \PYG{p}{:}
+		\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{canvas}\PYG{o}{.}\PYG{n}{destroy}\PYG{p}{()}
+
+\end{Verbatim}

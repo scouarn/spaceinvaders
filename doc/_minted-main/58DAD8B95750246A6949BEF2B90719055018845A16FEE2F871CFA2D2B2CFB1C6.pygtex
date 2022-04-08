@@ -1,0 +1,9 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{hit}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{)} \PYG{p}{:}
+	\PYG{k}{if} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lives} \PYG{p}{:}
+		\PYG{n}{L} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lives}\PYG{o}{.}\PYG{n}{pop}\PYG{p}{()}
+		\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{canvas}\PYG{o}{.}\PYG{n}{delete}\PYG{p}{(}\PYG{n}{L}\PYG{p}{)}
+
+	\PYG{k}{else} \PYG{p}{:}
+		\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{alive} \PYG{o}{=} \PYG{k+kc}{False}
+\end{Verbatim}

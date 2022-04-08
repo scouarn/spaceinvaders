@@ -1,0 +1,8 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{} Fleet}
+\PYG{k}{def} \PYG{n+nf}{screen\PYGZus{}collision}\PYG{p}{(}\PYG{n}{fleet}\PYG{p}{)} \PYG{p}{:}
+	\PYG{k}{return} \PYG{n+nb}{any}\PYG{p}{(}\PYG{n}{a}\PYG{o}{.}\PYG{n}{screen\PYGZus{}collision}\PYG{p}{()} \PYG{k}{for} \PYG{n}{a} \PYG{o+ow}{in} \PYG{n}{fleet}\PYG{p}{)}
+
+\PYG{k}{def} \PYG{n+nf}{collision}\PYG{p}{(}\PYG{n}{fleet}\PYG{p}{,} \PYG{n}{obj}\PYG{p}{)} \PYG{p}{:}
+	\PYG{k}{return} \PYG{n+nb}{any}\PYG{p}{(}\PYG{n}{a}\PYG{o}{.}\PYG{n}{collision}\PYG{p}{(}\PYG{n}{obj}\PYG{p}{)} \PYG{k}{for} \PYG{n}{a} \PYG{o+ow}{in} \PYG{n}{fleet}\PYG{p}{)}
+\end{Verbatim}

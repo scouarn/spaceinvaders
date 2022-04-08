@@ -1,0 +1,10 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{} GameObject}
+\PYG{k}{def} \PYG{n+nf}{collision}\PYG{p}{(}\PYG{n}{o1}\PYG{p}{,} \PYG{n}{o2}\PYG{p}{)} \PYG{p}{:}
+	\PYG{k}{return} \PYG{n+nb}{all}\PYG{p}{([}
+		\PYG{n}{o1}\PYG{o}{.}\PYG{n}{x} \PYG{o}{+} \PYG{n}{o1}\PYG{o}{.}\PYG{n}{width} \PYG{o}{\PYGZgt{}=} \PYG{n}{o2}\PYG{o}{.}\PYG{n}{x}\PYG{p}{,}  \PYG{c+c1}{\PYGZsh{} left}
+		\PYG{n}{o1}\PYG{o}{.}\PYG{n}{x} \PYG{o}{\PYGZlt{}=} \PYG{n}{o2}\PYG{o}{.}\PYG{n}{x} \PYG{o}{+} \PYG{n}{o2}\PYG{o}{.}\PYG{n}{width}\PYG{p}{,}  \PYG{c+c1}{\PYGZsh{} right}
+		\PYG{n}{o1}\PYG{o}{.}\PYG{n}{y} \PYG{o}{+} \PYG{n}{o1}\PYG{o}{.}\PYG{n}{height} \PYG{o}{\PYGZgt{}=} \PYG{n}{o2}\PYG{o}{.}\PYG{n}{y}\PYG{p}{,} \PYG{c+c1}{\PYGZsh{} top}
+		\PYG{n}{o1}\PYG{o}{.}\PYG{n}{y} \PYG{o}{\PYGZlt{}=} \PYG{n}{o2}\PYG{o}{.}\PYG{n}{y} \PYG{o}{+} \PYG{n}{o2}\PYG{o}{.}\PYG{n}{height}\PYG{p}{,} \PYG{c+c1}{\PYGZsh{} bottom}
+	\PYG{p}{])}
+\end{Verbatim}

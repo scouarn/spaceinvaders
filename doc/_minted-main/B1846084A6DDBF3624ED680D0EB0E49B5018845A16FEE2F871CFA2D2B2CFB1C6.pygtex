@@ -1,0 +1,12 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{aliens} \PYG{o}{=} \PYG{p}{[}
+	\PYG{n}{Alien}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{canvas}\PYG{p}{,}
+		\PYG{n}{x}\PYG{o}{=}\PYG{n}{i} \PYG{o}{*} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{spacing}\PYG{p}{,}
+		\PYG{n}{y}\PYG{o}{=}\PYG{n}{j} \PYG{o}{*} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{spacing} \PYG{o}{+} \PYG{l+m+mi}{64}\PYG{p}{,}
+		\PYG{n}{vx}\PYG{o}{=}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{vx}\PYG{p}{,}
+		\PYG{n+nb}{type}\PYG{o}{=}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{rows}\PYG{o}{\PYGZhy{}}\PYG{n}{j}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1} \PYG{c+c1}{\PYGZsh{} weakest at the bottom}
+	\PYG{p}{)}
+	\PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{cols}\PYG{p}{)}
+	\PYG{k}{for} \PYG{n}{j} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{rows}\PYG{p}{)}
+\PYG{p}{]}
+\end{Verbatim}

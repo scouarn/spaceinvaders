@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+	\PYG{o}{...}
+	\PYG{k}{if} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{game}\PYG{o}{.}\PYG{n}{is\PYGZus{}done}\PYG{p}{()} \PYG{p}{:}
+		\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{game}\PYG{o}{.}\PYG{n}{destroy}\PYG{p}{()}
+		\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{game} \PYG{o}{=} \PYG{n}{Game}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{canvas}\PYG{p}{)}
+	\PYG{o}{...}
+\end{Verbatim}

@@ -1,0 +1,8 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+player,score
+destructor,4500
+joss,7200
+terminator,16000
+tux,100
+pingu,16000
+\end{Verbatim}

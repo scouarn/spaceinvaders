@@ -1,0 +1,10 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+	\PYG{o}{...}
+	\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{create\PYGZus{}image}     \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{tkcanvas}\PYG{o}{.}\PYG{n}{create\PYGZus{}image}
+	\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{create\PYGZus{}rectangle} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{tkcanvas}\PYG{o}{.}\PYG{n}{create\PYGZus{}rectangle}
+	\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{create\PYGZus{}line}      \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{tkcanvas}\PYG{o}{.}\PYG{n}{create\PYGZus{}line}
+	\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{create\PYGZus{}text}      \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{tkcanvas}\PYG{o}{.}\PYG{n}{create\PYGZus{}text}
+	\PYG{o}{...}
+	\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{play\PYGZus{}wav} \PYG{o}{=} \PYG{n}{audio}\PYG{o}{.}\PYG{n}{play\PYGZus{}wav}
+	\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{stop\PYGZus{}all} \PYG{o}{=} \PYG{n}{audio}\PYG{o}{.}\PYG{n}{stop\PYGZus{}all}
+\end{Verbatim}

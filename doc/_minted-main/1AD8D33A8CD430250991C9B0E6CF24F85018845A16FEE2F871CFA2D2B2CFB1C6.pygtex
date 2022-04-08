@@ -1,0 +1,29 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k}{as} \PYG{n+nn}{np}
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib.pyplot} \PYG{k}{as} \PYG{n+nn}{plt}
+
+\PYG{c+c1}{\PYGZsh{}constantes}
+\PYG{n}{L}  \PYG{o}{=} \PYG{l+m+mf}{10.0}
+\PYG{n}{dx} \PYG{o}{=} \PYG{l+m+mf}{0.1}
+\PYG{n}{tf} \PYG{o}{=} \PYG{l+m+mf}{50.0}
+\PYG{n}{dt} \PYG{o}{=} \PYG{l+m+mf}{0.001}
+
+\PYG{c+c1}{\PYGZsh{}vérification humaine si le pas est trop grand}
+\PYG{k}{if} \PYG{p}{(}\PYG{n}{delta} \PYG{o}{:=} \PYG{n}{dt}\PYG{o}{/}\PYG{p}{(}\PYG{n}{dx}\PYG{o}{*}\PYG{n}{dx}\PYG{p}{)} \PYG{p}{)} \PYG{o}{\PYGZgt{}} \PYG{l+m+mf}{0.1} \PYG{p}{:}
+    \PYG{n+nb}{input}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s1}{\PYGZsq{}Delta = }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{delta}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{, continuer ?\PYGZsq{}}\PYG{p}{)}
+
+
+\PYG{n}{n\PYGZus{}x} \PYG{o}{=} \PYG{n+nb}{int}\PYG{p}{(}\PYG{n}{L}\PYG{o}{/}\PYG{n}{dx}\PYG{p}{)}  \PYG{c+c1}{\PYGZsh{}nombre de valeurs de X}
+\PYG{n}{n\PYGZus{}t} \PYG{o}{=} \PYG{n+nb}{int}\PYG{p}{(}\PYG{n}{tf}\PYG{o}{/}\PYG{n}{dt}\PYG{p}{)} \PYG{c+c1}{\PYGZsh{}nombre de valeurs de t}
+
+\PYG{n}{thet} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{((}\PYG{n}{n\PYGZus{}x}\PYG{p}{,} \PYG{n}{n\PYGZus{}t}\PYG{p}{))} \PYG{c+c1}{\PYGZsh{}matrice de résultats}
+
+\PYG{n}{thet}\PYG{p}{[:,} \PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{.}\PYG{n}{fill}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{)} \PYG{c+c1}{\PYGZsh{}conditions initiales}
+\PYG{n}{thet}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{.}\PYG{n}{fill}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)}    \PYG{c+c1}{\PYGZsh{}conditions limites}
+\PYG{n}{thet}\PYG{p}{[}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{o}{.}\PYG{n}{fill}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{}différentielle}
+\PYG{n}{d\PYGZus{}theth} \PYG{o}{=} \PYG{k}{lambda} \PYG{n}{x}\PYG{p}{,}\PYG{n}{t} \PYG{p}{:} \PYG{p}{(}\PYG{n}{thet}\PYG{p}{[}\PYG{n}{x}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{p}{][}\PYG{n}{t}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{+} \PYG{n}{thet}\PYG{p}{[}\PYG{n}{x}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{][}\PYG{n}{t}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{2}\PYG{o}{*}\PYG{n}{thet}\PYG{p}{[}\PYG{n}{x}\PYG{p}{][}\PYG{n}{t}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{])}\PYG{o}{/}\PYG{p}{(}\PYG{n}{dx}\PYG{o}{*}\PYG{n}{dx}\PYG{p}{)}
+
+
+\end{Verbatim}

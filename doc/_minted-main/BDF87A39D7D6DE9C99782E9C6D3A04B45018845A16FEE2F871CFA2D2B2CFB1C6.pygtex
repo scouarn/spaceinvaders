@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{canvas}\PYG{p}{,} \PYG{n}{x}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{y}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{vx}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{vy}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{image}\PYG{o}{=}\PYG{k+kc}{None}\PYG{p}{)} \PYG{p}{:}
+	\PYG{o}{...}
+\end{Verbatim}

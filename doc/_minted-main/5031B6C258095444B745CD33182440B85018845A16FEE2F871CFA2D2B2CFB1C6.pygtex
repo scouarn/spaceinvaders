@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{if} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{keys}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}left\PYGZdq{}}\PYG{p}{]} \PYG{o+ow}{and} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{x} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0} \PYG{p}{:}
+	\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{x} \PYG{o}{\PYGZhy{}=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{vx} \PYG{o}{*} \PYG{n}{dt}
+
+\PYG{k}{if} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{keys}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}right\PYGZdq{}}\PYG{p}{]} \PYG{o+ow}{and} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{x}\PYG{o}{+}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{width} \PYG{o}{\PYGZlt{}} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{canvas}\PYG{o}{.}\PYG{n}{get\PYGZus{}width}\PYG{p}{()} \PYG{p}{:}
+	\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{x} \PYG{o}{+=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{vx} \PYG{o}{*} \PYG{n}{dt}
+\end{Verbatim}

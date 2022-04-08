@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{} Game.update()}
+\PYG{k}{for} \PYG{n}{a} \PYG{o+ow}{in} \PYG{p}{\PYGZob{}}\PYG{n}{a} \PYG{k}{for} \PYG{n}{a}\PYG{p}{,} \PYG{n}{\PYGZus{}} \PYG{o+ow}{in} \PYG{n}{collisions}\PYG{p}{\PYGZcb{}} \PYG{p}{:}
+	\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{add\PYGZus{}score}\PYG{p}{(}\PYG{n}{a}\PYG{o}{.}\PYG{n}{get\PYGZus{}value}\PYG{p}{())}
+	\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{boom}\PYG{p}{(}\PYG{n}{a}\PYG{o}{.}\PYG{n}{get\PYGZus{}x}\PYG{p}{(),} \PYG{n}{a}\PYG{o}{.}\PYG{n}{get\PYGZus{}y}\PYG{p}{())}
+	\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{fleet}\PYG{o}{.}\PYG{n}{remove}\PYG{p}{(}\PYG{n}{a}\PYG{p}{)}
+\end{Verbatim}

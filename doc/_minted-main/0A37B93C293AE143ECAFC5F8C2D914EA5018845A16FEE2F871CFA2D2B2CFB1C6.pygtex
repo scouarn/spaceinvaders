@@ -1,0 +1,9 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{} Fleet.update()}
+\PYG{k}{if} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{screen\PYGZus{}collision}\PYG{p}{()} \PYG{p}{:}
+	\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{vx} \PYG{o}{*=} \PYG{o}{\PYGZhy{}}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{acc}
+
+	\PYG{k}{for} \PYG{n}{alien} \PYG{o+ow}{in} \PYG{n+nb+bp}{self} \PYG{p}{:}
+		\PYG{n}{alien}\PYG{o}{.}\PYG{n}{set\PYGZus{}vx}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{vx}\PYG{p}{)}
+		\PYG{n}{alien}\PYG{o}{.}\PYG{n}{add\PYGZus{}y}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{vy}\PYG{p}{)}
+\end{Verbatim}
